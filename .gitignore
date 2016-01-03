@@ -16,9 +16,10 @@ hs_err_pid*
 
 /classes
 /.myeclipse
-/.settings
+.settings
 /log
 /logs
+target
 # J2SE
 
 .classpath

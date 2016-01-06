@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	<!-- 属性配置 -->
+	<properties resource="default-db.properties"></properties>
+	<!-- mybatis设置信息 -->
+	<!-- <settings>
+		<setting name="cacheEnabled" value="true" />
+	</settings> -->
+	<!-- 为java类型创建短别名 -->
+	<!-- <typeAliases>
+		<typeAlias type="" alias=""/>
+	</typeAliases> -->
+	
+	<!-- 类型处理器，用于将jdbc与java类型的转换 -->
+	<!-- <typeHandlers>
+		<typeHandler handler="" javaType="" jdbcType=""/>
+	</typeHandlers> -->
+	
+	<!-- 定义插件在某一点拦截已映射语句执行的调用 -->
+	<!-- <plugins>
+		<plugin interceptor=""></plugin>
+	</plugins> -->
+	
+	<!-- mybatis环境配置 -->
+	<environments default="default">
+		<environment id="default">
+			<transactionManager type="JDBC"></transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driverClassName}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<!-- 根据不同数据库执行不同语句 ,基于映射语句中的 databaseId 属性 -->
+	<databaseIdProvider type="DB_VENDOR">
+		<property name="SQL Server" value="sqlserver"/>
+		<property name="DB2" value="db2"/>        
+		<property name="Oracle" value="oracle" />
+		<property name="MySQL" value="mysql"/>
+	</databaseIdProvider>
+	
+	<!-- sql映射 -->
+	<mappers>
+		<mapper resource="org/framework/commons/db/mapper/BaseMapper.xml"/>
+	</mappers>
+</configuration>

@@ -21,7 +21,7 @@ public class TestMyBatisSessionFactory extends TestCase {
 		
 		assertNotNull(baseMapper);
 		
-		List<Map<String, Object>> result=baseMapper.selectBySql("show databases");
+		List<Map<String, Object>> result=baseMapper.selectBySql("show tables");
 		System.out.println(result.size());
 		
 		MyBatisSessionFactory.closeSqlSession();
@@ -40,6 +40,8 @@ public class TestMyBatisSessionFactory extends TestCase {
 		sql.WHERE("column7=7");
 	
 		System.out.println(sql.toString());
+		
+		
 	}
 	
 }

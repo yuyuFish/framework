@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
+	default-lazy-init="true">
+
+	<description>Shiro Configuration</description>
+	
+	<!-- EhCache 缓存管理 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:ehcache.xml"></property>
+	</bean>
+	
+	<!-- 凭证匹配 -->
+	<bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<property name="hashAlgorithmName" value="sha1"></property>
+		<property name="hashIterations" value="1"></property>
+		<property name="storedCredentialsHexEncoded" value="false"></property>
+	</bean>
+	
+	<!-- 采用java uuid  生成 sessionId -->
+	<bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"></bean>
+
+	<!-- session Dao 对session 做存储管理 -->
+	<bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+		<!-- <property name="cacheManager" ref="cacheManager"></property> -->
+		<property name="sessionIdGenerator" ref="sessionIdGenerator"></property>
+		<property name="activeSessionsCacheName" value="shiro-activeSessionCache"></property>
+	</bean>
+
+	<!-- 自定义sessionId cookie 模板 -->
+	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<property name="name" value="sid"></property>
+		<property name="httpOnly" value="true"></property>
+		<property name="maxAge" value="-1"></property>
+	</bean>
+	<!-- 记住登入状态 cookie 设置 -->
+	<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<property name="name" value="rememberMe"></property>
+		<property name="httpOnly" value="true"></property>
+		<property name="maxAge" value="2592000"></property><!-- /s -->
+	</bean>
+	
+	<!-- <bean id="cipherService" class="org.apache.shiro.crypto.AesCipherService">
+		
+	</bean> -->
+	
+	<!-- 记住登入状态管理类 -->
+	<bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+		<property name="cookie" ref="rememberMeCookie"></property>
+		<property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('cdQb1OvETNADSYMOczz4DBe43MQ=')}"></property> <!-- 默认AES zhaotian-sha1-base64 -->
+		
+	</bean>
+	
+	<!-- session 定时验证策略 -->
+	<bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
+		<property name="sessionManager" ref="sessionManager"></property>
+		<property name="sessionValidationInterval" value="1800000"></property>
+	</bean>
+	
+	<!-- sessionManager -->
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<property name="sessionIdCookieEnabled" value="true"></property>
+		<property name="sessionIdCookie" ref="sessionIdCookie"></property>
+		<property name="sessionDAO" ref="sessionDAO"></property>
+		<property name="sessionValidationSchedulerEnabled" value="true"></property>
+		<property name="sessionValidationScheduler" ref="sessionValidationScheduler"></property>
+		<property name="deleteInvalidSessions" value="true"></property>
+		<property name="globalSessionTimeout" value="1800000"></property>
+	</bean>
+	
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- <property name="realms">
+			<list>
+				<ref bean="appRealm"/>
+			</list>
+		</property> -->
+		<property name="cacheManager" ref="cacheManager"></property>
+		<property name="rememberMeManager" ref="rememberMeManager"></property>
+	</bean>
+	
+	<!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"></property>
+		<property name="arguments" ref="securityManager"></property>
+	</bean>
+	
+	<!-- Shiro Filter -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/app/auth" />
+		<property name="successUrl" value="/app/act_toMenu.action " />
+		<property name="unauthorizedUrl" value="/public/401.jsp"></property>
+		<property name="filterChainDefinitions">
+			<value>
+				
+		 	</value>
+		</property>
+		<property name="filters">
+			<map>
+				<!-- <entry key="dingAuthFilter" value-ref="dingAuthFilter"></entry> -->
+			</map>
+		</property>
+	</bean>
+	
+	<!-- 自定义Realm -->
+	<!-- <bean id="appRealm" class="com.teamwings.base.shiro.realm.AppRealm">
+		<property name="credentialsMatcher" ref="hashedCredentialsMatcher"></property>
+		<property name="cachingEnabled" value="true"></property>
+		<property name="authenticationCachingEnabled" value="true"></property>
+		<property name="authenticationCacheName" value="authenticationCache"></property>
+		<property name="authorizationCachingEnabled" value="true"></property>
+		<property name="authorizationCacheName" value="authorizationCache"></property>
+	</bean> -->
+	
+	<!-- 自定义拦截器 -->
+	<!-- <bean id="dingAuthFilter" class="com.teamwings.base.shiro.filter.DingAuthFilter">
+		<property name="loginUrl" value="/app/auth"></property>
+		<property name="successUrl" value="/app/act_toMenu.action"></property>
+		<property name="failUrl" value="/public/app_error.jsp"></property>
+	</bean> -->
+	
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 用于shrio bean 生命周期管理 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+	
+	<!-- 注解权限控制 -->
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+    	<property name="securityManager" ref="securityManager"/>
+	</bean>
+	
+</beans>

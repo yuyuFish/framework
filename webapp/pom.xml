@@ -13,6 +13,7 @@
 		<framework.commons-db.version>0.0.1-SNAPSHOT</framework.commons-db.version>
 		<javax.servlet.version>3.1.0</javax.servlet.version>
 		<jetty.server.version>9.3.6.v20151106</jetty.server.version>
+		<patchca.version>0.5.1-SNAPSHOT</patchca.version>
 	</properties>
 
 	<dependencies>
@@ -21,6 +22,11 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
 		</dependency>
 		
 		<dependency>
@@ -80,13 +86,13 @@
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-ehcache</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 		    <groupId>org.patchca</groupId>
 		    <artifactId>patchca</artifactId>
 		    <version>0.5.0</version>
 		    <scope>system</scope>
 		    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/patchca-0.5.0.jar</systemPath>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>c3p0</groupId>
 			<artifactId>c3p0</artifactId>
@@ -99,6 +105,41 @@
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.framework</groupId>
+		    <artifactId>patchca</artifactId>
+		    <version>${patchca.version}</version>
 		</dependency>
 	</dependencies>
 

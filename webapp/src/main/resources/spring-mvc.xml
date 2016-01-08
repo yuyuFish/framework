@@ -151,9 +151,17 @@
 		<property name="maxLength" value="7"></property>
 	</bean>
 	
+	<bean id="fontFactory" class="org.patchca.font.RandomFontFactory">
+		<property name="minSize" value="32"></property>
+		<property name="maxSize" value="40"></property>
+	</bean>
+	
 	<bean id="configurableCaptchaService" class="org.patchca.service.ConfigurableCaptchaService">
 		<property name="colorFactory" ref="randomColorFactory"></property>
 		<property name="wordFactory" ref="randomWordFactory"></property>
+		<property name="fontFactory" ref="fontFactory"></property>
+		<property name="width" value="150"></property>
+		<property name="height" value="40"></property>
 	</bean>
 	
 	<!-- end patchca -->

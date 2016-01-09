@@ -140,6 +140,7 @@
 		    <groupId>org.framework</groupId>
 		    <artifactId>patchca</artifactId>
 		    <version>${patchca.version}</version>
+		    <scope>compile</scope>
 		</dependency>
 	</dependencies>
 

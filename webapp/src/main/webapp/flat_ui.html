@@ -5,31 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>Bootstrap 101 Template</title>
+    <title>Login</title>
 
     <!-- Bootstrap -->
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/css/flat-ui.min.css" rel="stylesheet">
-    <style type="text/css">
-      html,body{
-        height: 100%;
-      }
-      .login-background {
-          background-color: #1abc9c;
-          height: 100%;
-          padding-top: 10%;
-      }
-      
-    </style>
+    <link href="static/css/common.css" rel="stylesheet">
   </head>
   <body>
     
     <div class="container-fluid login-background">
       <div class="col-md-2"></div>
       <div class="col-md-2">
+        <div class="mlogin-icon">
+          <img src="static/img/login/icon.png" alt="Welcome to Mail App">
+          <h4>Welcome to <small>Mail App</small></h4>
+        </div>
       </div>
       <div class="col-md-4">
-        <div class="login-form">
+        <form class="login-form">
             <div class="form-group">
               <input type="text" id="login-name" placeholder="Enter your name" value="" class="form-control login-field">
               <label for="login-name" class="login-field-icon fui-user"></label>
@@ -42,18 +36,11 @@
 
             <a href="#" class="btn btn-primary btn-lg btn-block">Log in</a>
             <a href="#" class="login-link">Lost your password?</a>
-          </div>
+          </form>
         </div>
         <div class="col-md-4"></div>
       </div>
-      
-       
-
-        
-      
-      
-       
-       
+   
     </div>
    <script type="text/javascript" src="static/js/jquery-1.11.3.min.js"></script>
    <script type="text/javascript" src="static/js/bootstrap.min.js"></script>

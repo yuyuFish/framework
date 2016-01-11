@@ -23,6 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
     <center>
+    <input type="search" />
     	<div>
     		<form:form method="POST" commandName="user" >
     			<form:input path="username" /> <form:errors path="username"></form:errors>

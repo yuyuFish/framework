@@ -1,25 +1,32 @@
-package org.framework.webapp.base.modul;
+package org.framework.webapp.base.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 权限操作model
+ * @author ztgoto
+ * @version  
+ * @date  2016年1月12日 上午9:00:56
+ */
 public class AmPermission implements Serializable {
-	private String permissionId;
-	private String permissionName;
-	private String permissionInfo;
-	private String permissionUrl;
-	private String permissionCode;
-	private String operateIp;
-	private String operateType;
-	private String requestType;
-	private String requestHeaders;
-	private String requestParameters;
-	private String logicType;
-	private String permissionClassMethod;
-	private Date createTime;
-	private Date editTime;
-	private Date deleteTime;
-	private String dataState;
+	private String permissionId;	//权限id	PERMISSION_ID varchar(128)
+	private String productId;	//产品线ID 	PRODUCT_ID varchar(128)
+	private String permissionName;	//权限名称	PERMISSION_NAME varchar(256)
+	private String permissionInfo;	//权限描述信息	PERMISSION_INFO varchar(512)
+	private String permissionUrl;	//权限操作URL	PERMISSION_URL varchar(2048)
+	private String permissionCode;	//权限操作Code(暂使用shiro 语法)	PERMISSION_CODE varchar(1024)
+	private String operateIp;		//访问者ip	OPERATE_IP varchar(128)
+	private String operateType;		//操作类型(CURD) OPERATE_TYPE varchar(256)
+	private String requestType;		//请求类型(GET POST) REQUEST_TYPE varchar(256)
+	private String requestHeaders;	//请求头信息	REQUEST_HEADERS varchar(1024)
+	private String requestParameters;	//请求参数	REQUEST_PARAMETERS varchar(1024)
+	private String logicType;			//逻辑判断类型(暂定) LOGIC_TYPE varchar(128)
+	private String permissionClassMethod; //操作所使用的类和方法	PERMISSION_CLASS_METHOD varchar(1024)
+	private Date createTime;		//数据创建时间	CREATE_TIME datetime
+	private Date editTime;			//数据修改时间	EDIT_TIME datetime
+	private Date deleteTime;		//数据删除时间	DELETE_TIME datetime
+	private String dataState;		//数据逻辑状态	DATA_STATE varchar(32)
 	public String getPermissionId() {
 		return permissionId;
 	}
@@ -116,16 +123,22 @@ public class AmPermission implements Serializable {
 	public void setDataState(String dataState) {
 		this.dataState = dataState;
 	}
+	public String getProductId() {
+		return productId;
+	}
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
 	@Override
 	public String toString() {
-		return "AmPermission [permissionId=" + permissionId
-				+ ", permissionName=" + permissionName + ", permissionInfo="
-				+ permissionInfo + ", permissionUrl=" + permissionUrl
-				+ ", permissionCode=" + permissionCode + ", operateIp="
-				+ operateIp + ", operateType=" + operateType + ", requestType="
-				+ requestType + ", requestHeaders=" + requestHeaders
-				+ ", requestParameters=" + requestParameters + ", logicType="
-				+ logicType + ", permissionClassMethod="
+		return "AmPermission [permissionId=" + permissionId + ", productId="
+				+ productId + ", permissionName=" + permissionName
+				+ ", permissionInfo=" + permissionInfo + ", permissionUrl="
+				+ permissionUrl + ", permissionCode=" + permissionCode
+				+ ", operateIp=" + operateIp + ", operateType=" + operateType
+				+ ", requestType=" + requestType + ", requestHeaders="
+				+ requestHeaders + ", requestParameters=" + requestParameters
+				+ ", logicType=" + logicType + ", permissionClassMethod="
 				+ permissionClassMethod + ", createTime=" + createTime
 				+ ", editTime=" + editTime + ", deleteTime=" + deleteTime
 				+ ", dataState=" + dataState + "]";

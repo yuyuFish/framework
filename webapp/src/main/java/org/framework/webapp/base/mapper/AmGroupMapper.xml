@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.framework.webapp.base.mapper.AmGroupMapper">
+	<!-- <cache-ref namespace=""/> -->
+	<sql id="groupColumns">
+	    <![CDATA[
+	    ${alias}GROUP_ID as groupId
+	    ,${alias}PRODUCT_ID as productId
+	    ,${alias}PARENT_GROUP_ID as parentGroupId
+	    ,${alias}GROUP_NAME as groupName
+	    ,${alias}GROUP_INFO as groupInfo
+	    ,${alias}GROUP_CODE as groupCode
+	    ,${alias}IS_INHERIT as isInherit
+	    ,${alias}LEFT_VALUE as leftValue
+	    ,${alias}RIGHT_VALUE as rightValue
+	    ,${alias}CREATE_TIME as createTime
+	    ,${alias}EDIT_TIME as editTime
+	    ,${alias}DELETE_TIME as deleteTime
+	    ,${alias}DATA_STATE as dataState
+	    ]]>
+	</sql>
+
+</mapper>

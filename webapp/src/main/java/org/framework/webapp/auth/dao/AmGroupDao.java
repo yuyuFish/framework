@@ -1,8 +1,9 @@
-package org.framework.webapp.base.dao;
+package org.framework.webapp.auth.dao;
 
 import java.util.List;
 
-import org.framework.webapp.base.model.AmGroup;
+import org.framework.webapp.auth.model.AmGroup;
+import org.framework.webapp.base.dao.BaseDao;
 
 /**
  * 用户组

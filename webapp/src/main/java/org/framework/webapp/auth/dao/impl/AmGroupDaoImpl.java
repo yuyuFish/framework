@@ -1,9 +1,10 @@
-package org.framework.webapp.base.dao.impl;
+package org.framework.webapp.auth.dao.impl;
 
 import java.util.List;
 
-import org.framework.webapp.base.dao.AmGroupDao;
-import org.framework.webapp.base.model.AmGroup;
+import org.framework.webapp.auth.dao.AmGroupDao;
+import org.framework.webapp.auth.model.AmGroup;
+import org.framework.webapp.base.dao.impl.BaseDaoImpl;
 
 public class AmGroupDaoImpl extends BaseDaoImpl implements AmGroupDao {
 

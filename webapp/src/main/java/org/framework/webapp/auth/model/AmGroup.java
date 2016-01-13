@@ -1,4 +1,4 @@
-package org.framework.webapp.base.model;
+package org.framework.webapp.auth.model;
 
 import java.io.Serializable;
 import java.util.Date;

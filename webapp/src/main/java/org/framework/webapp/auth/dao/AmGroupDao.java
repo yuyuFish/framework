@@ -1,6 +1,7 @@
 package org.framework.webapp.auth.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.framework.webapp.auth.model.AmGroup;
 import org.framework.webapp.base.dao.BaseDao;
@@ -46,4 +47,13 @@ public interface AmGroupDao extends BaseDao {
 	 */
 	List<AmGroup> getAll();
 	
+	
+	/**
+	 * 
+	 * @param whereStr
+	 * @param paraKey
+	 * @param parameters
+	 * @return
+	 */
+	List<AmGroup> getByWhere(String whereSql,String paraKey,Map<String, Object> parameters);
 }

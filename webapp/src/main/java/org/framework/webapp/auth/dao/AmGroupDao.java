@@ -49,11 +49,26 @@ public interface AmGroupDao extends BaseDao {
 	
 	
 	/**
-	 * 
-	 * @param whereStr
-	 * @param paraKey
-	 * @param parameters
+	 * 条件查询
+	 * @param whereStr where 条件
+	 * @param paraKey where条件中所使用的参数键 如#{paraKey.*} 
+	 * paraKey是你想使用的键名默认为parameters，
+	 *  “*” 为parameters map中的key
+	 * @param parameters where条件中的对应参数
 	 * @return
 	 */
 	List<AmGroup> getByWhere(String whereSql,String paraKey,Map<String, Object> parameters);
+	
+	/**
+	 * 分页条件查询
+	 * @param whereStr where 条件
+	 * @param paraKey where条件中所使用的参数键 如#{paraKey.*} 
+	 * paraKey是你想使用的键名默认为parameters，
+	 *  “*” 为parameters map中的key
+	 * @param parameters where条件中的对应参数
+	 * @param startIndex 开始索引
+	 * @param size 数据条数
+	 * @return
+	 */
+	List<AmGroup> getByWherePage(String whereSql,String paraKey,Map<String, Object> parameters,Long startIndex,Long size);
 }

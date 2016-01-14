@@ -75,7 +75,13 @@ public class TestAmGroupDao extends AbstractJUnit4SpringContextTests {
 	public void testGetByWhere(){
 		Map<String, Object> map=new HashMap<String, Object>();
 		map.put("groupId", "5a6e33e98c1b4ebfa8c4cf5d71fe80e8");
-		List<AmGroup> result=amGroupDao.getByWhere("GROUP_ID=#{pa.groupId}", "pa", map);
+		List<AmGroup> result=amGroupDao.getByWhere("where GROUP_ID=#{pa.groupId}", "pa", map);
+		System.out.println(result.size());
+	}
+	
+	@Test
+	public void testGetByWherePage(){
+		List<AmGroup> result=amGroupDao.getByWherePage(null, null, null, 0L, 2L);
 		System.out.println(result.size());
 	}
 }

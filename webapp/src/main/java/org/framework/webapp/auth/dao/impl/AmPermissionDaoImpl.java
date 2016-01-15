@@ -4,19 +4,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.framework.webapp.auth.dao.AmGroupDao;
-import org.framework.webapp.auth.model.AmGroup;
+import org.framework.webapp.auth.dao.AmPermissionDao;
+import org.framework.webapp.auth.model.AmPermission;
 import org.framework.webapp.base.dao.impl.BaseDaoImpl;
 import org.springframework.stereotype.Repository;
-@Repository("amGroupDao")
-public class AmGroupDaoImpl extends BaseDaoImpl implements AmGroupDao {
+@Repository("amPermissionDao")
+public class AmPermissionDaoImpl extends BaseDaoImpl implements AmPermissionDao {
 
 	@Override
-	public int save(AmGroup amGroup) {
+	public int save(AmPermission amPermission) {
 		if(LOG.isDebugEnabled()){
-			LOG.debug(">>>>parameter:"+amGroup);
+			LOG.debug(">>>>parameter:"+amPermission);
 		}
-		int result=getSqlSession().insert("org.framework.webapp.auth.mapper.AmGroupMapper.save", amGroup);
+		int result=getSqlSession().insert("org.framework.webapp.auth.mapper.AmPermissionMapper.save", amPermission);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>result:"+result);
 		}
@@ -24,23 +24,11 @@ public class AmGroupDaoImpl extends BaseDaoImpl implements AmGroupDao {
 	}
 
 	@Override
-	public int update(AmGroup amGroup) {
+	public int update(AmPermission amPermission) {
 		if(LOG.isDebugEnabled()){
-			LOG.debug(">>>>parameter:"+amGroup);
+			LOG.debug(">>>>parameter:"+amPermission);
 		}
-		int result=getSqlSession().update("org.framework.webapp.auth.mapper.AmGroupMapper.update", amGroup);
-		if(LOG.isDebugEnabled()){
-			LOG.debug(">>>>result:"+result);
-		}
-		return result;
-	}
-
-	@Override
-	public int deleteById(String groupId) {
-		if(LOG.isDebugEnabled()){
-			LOG.debug(">>>>parameter:"+groupId);
-		}
-		int result=getSqlSession().delete("org.framework.webapp.auth.mapper.AmGroupMapper.deleteById", groupId);
+		int result=getSqlSession().update("org.framework.webapp.auth.mapper.AmPermissionMapper.update", amPermission);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>result:"+result);
 		}
@@ -48,11 +36,11 @@ public class AmGroupDaoImpl extends BaseDaoImpl implements AmGroupDao {
 	}
 
 	@Override
-	public AmGroup getById(String groupId) {
+	public int deleteById(String permissionId) {
 		if(LOG.isDebugEnabled()){
-			LOG.debug(">>>>parameter:"+groupId);
+			LOG.debug(">>>>parameter:"+permissionId);
 		}
-		AmGroup result=getSqlSession().selectOne("org.framework.webapp.auth.mapper.AmGroupMapper.getById", groupId);
+		int result=getSqlSession().delete("org.framework.webapp.auth.mapper.AmPermissionMapper.deleteById", permissionId);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>result:"+result);
 		}
@@ -60,8 +48,20 @@ public class AmGroupDaoImpl extends BaseDaoImpl implements AmGroupDao {
 	}
 
 	@Override
-	public List<AmGroup> getAll() {
-		List<AmGroup> result=getSqlSession().selectList("org.framework.webapp.auth.mapper.AmGroupMapper.getAll");
+	public AmPermission getById(String permissionId) {
+		if(LOG.isDebugEnabled()){
+			LOG.debug(">>>>parameter:"+permissionId);
+		}
+		AmPermission result=getSqlSession().selectOne("org.framework.webapp.auth.mapper.AmPermissionMapper.getById", permissionId);
+		if(LOG.isDebugEnabled()){
+			LOG.debug(">>>>result:"+result);
+		}
+		return result;
+	}
+
+	@Override
+	public List<AmPermission> getAll() {
+		List<AmPermission> result=getSqlSession().selectList("org.framework.webapp.auth.mapper.AmPermissionMapper.getAll");
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>result size:"+(result==null?"null":result.size()));
 		}
@@ -70,7 +70,7 @@ public class AmGroupDaoImpl extends BaseDaoImpl implements AmGroupDao {
 	}
 
 	@Override
-	public List<AmGroup> getByWhere(String whereSql, String paraKey,
+	public List<AmPermission> getByWhere(String whereSql, String paraKey,
 			Map<String, Object> parameters) {
 		if(paraKey==null||"".equals(paraKey.trim())) paraKey="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
@@ -79,7 +79,7 @@ public class AmGroupDaoImpl extends BaseDaoImpl implements AmGroupDao {
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>parameters warp map:"+parameters);
 		}
-		List<AmGroup> result=getSqlSession().selectList("org.framework.webapp.auth.mapper.AmGroupMapper.getByWhere",paraWarp);
+		List<AmPermission> result=getSqlSession().selectList("org.framework.webapp.auth.mapper.AmPermissionMapper.getByWhere",paraWarp);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>result size:"+(result==null?"null":result.size()));
 		}
@@ -88,7 +88,7 @@ public class AmGroupDaoImpl extends BaseDaoImpl implements AmGroupDao {
 	}
 
 	@Override
-	public List<AmGroup> getByWherePage(String whereSql, String paraKey,
+	public List<AmPermission> getByWherePage(String whereSql, String paraKey,
 			Map<String, Object> parameters, Long startIndex, Long size) {
 		if(paraKey==null||"".equals(paraKey.trim())) paraKey="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
@@ -99,14 +99,12 @@ public class AmGroupDaoImpl extends BaseDaoImpl implements AmGroupDao {
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>parameters warp map:"+parameters);
 		}
-		List<AmGroup> result=getSqlSession().selectList("org.framework.webapp.auth.mapper.AmGroupMapper.getByWherePage",paraWarp);
+		List<AmPermission> result=getSqlSession().selectList("org.framework.webapp.auth.mapper.AmPermissionMapper.getByWherePage",paraWarp);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>result size:"+(result==null?"null":result.size()));
 		}
 		
 		return result;
 	}
-	
-	
-	
+
 }

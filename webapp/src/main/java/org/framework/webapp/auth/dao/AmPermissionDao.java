@@ -3,49 +3,48 @@ package org.framework.webapp.auth.dao;
 import java.util.List;
 import java.util.Map;
 
-import org.framework.webapp.auth.model.AmGroup;
+import org.framework.webapp.auth.model.AmPermission;
 import org.framework.webapp.base.dao.BaseDao;
-
 /**
- * 用户组
+ * 操作权限
  * @author ztgoto
  * @version  
- * @date  2016年1月12日 下午5:26:00
+ * @date  2016年1月14日 下午4:30:55
  */
-public interface AmGroupDao extends BaseDao {
+public interface AmPermissionDao extends BaseDao {
 	/**
 	 * 新建一条数据
-	 * @param amGroup
+	 * @param amPermission
 	 * @return
 	 */
-	int save(AmGroup amGroup);
+	int save(AmPermission amPermission);
 	
 	/**
 	 * 修改一条数据
-	 * @param amGroup
+	 * @param amPermission
 	 * @return
 	 */
-	int update(AmGroup amGroup);
+	int update(AmPermission amPermission);
 	
 	/**
 	 * 根据id删除一条数据
-	 * @param groupId
+	 * @param permissionId
 	 * @return
 	 */
-	int deleteById(String groupId);
+	int deleteById(String permissionId);
 	
 	/**
 	 * 根据id查询一条数据
 	 * @param groupId
 	 * @return
 	 */
-	AmGroup getById(String groupId);
+	AmPermission getById(String permissionId);
 	
 	/**
 	 * 查询所有数据
 	 * @return
 	 */
-	List<AmGroup> getAll();
+	List<AmPermission> getAll();
 	
 	
 	/**
@@ -57,7 +56,7 @@ public interface AmGroupDao extends BaseDao {
 	 * @param parameters where条件中的对应参数
 	 * @return
 	 */
-	List<AmGroup> getByWhere(String whereSql,String paraKey,Map<String, Object> parameters);
+	List<AmPermission> getByWhere(String whereSql,String paraKey,Map<String, Object> parameters);
 	
 	/**
 	 * 分页条件查询
@@ -70,5 +69,5 @@ public interface AmGroupDao extends BaseDao {
 	 * @param size 数据条数
 	 * @return
 	 */
-	List<AmGroup> getByWherePage(String whereSql,String paraKey,Map<String, Object> parameters,Long startIndex,Long size);
+	List<AmPermission> getByWherePage(String whereSql,String paraKey,Map<String, Object> parameters,Long startIndex,Long size);
 }

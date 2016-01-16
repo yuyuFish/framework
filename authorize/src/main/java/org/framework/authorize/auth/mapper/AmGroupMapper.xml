@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.framework.authorize.auth.mapper.AmGroupMapper">
+	<!-- <cache-ref namespace=""/> -->
+	
+	<sql id="select_groupColumns">
+	    ${alias}GROUP_ID as groupId
+	    ,${alias}PRODUCT_ID as productId
+	    ,${alias}PARENT_GROUP_ID as parentGroupId
+	    ,${alias}GROUP_NAME as groupName
+	    ,${alias}GROUP_INFO as groupInfo
+	    ,${alias}GROUP_CODE as groupCode
+	    ,${alias}IS_INHERIT as isInherit
+	    ,${alias}LEFT_VALUE as leftValue
+	    ,${alias}RIGHT_VALUE as rightValue
+	    ,${alias}CREATE_TIME as createTime
+	    ,${alias}EDIT_TIME as editTime
+	    ,${alias}DELETE_TIME as deleteTime
+	    ,${alias}DATA_STATE as dataState
+	</sql>
+	
+	<sql id="insert_groupColumns">
+	    GROUP_ID
+	    ,PRODUCT_ID
+	    ,PARENT_GROUP_ID
+	    ,GROUP_NAME
+	    ,GROUP_INFO
+	    ,GROUP_CODE
+	    ,IS_INHERIT
+	    ,LEFT_VALUE
+	    ,RIGHT_VALUE
+	    ,CREATE_TIME
+	    ,EDIT_TIME
+	    ,DELETE_TIME
+	    ,DATA_STATE
+	</sql>
+	
+	<resultMap type="org.framework.authorize.auth.model.AmGroup" id="amGroupMapping" autoMapping="true">
+	    <id property="groupId" column="groupId"/>
+	    <result property="productId" column="productId"/>
+	    <result property="parentGroupId" column="parentGroupId"/>
+	    <result property="groupName" column="groupName"/>
+	    <result property="groupInfo" column="groupInfo"/>
+	    <result property="groupCode" column="groupCode"/>
+	    <result property="isInherit" column="isInherit"/>
+	    <result property="leftValue" column="leftValue"/>
+	    <result property="rightValue" column="rightValue"/>
+	    <result property="createTime" column="createTime"/>
+	    <result property="editTime" column="editTime"/>
+	    <result property="deleteTime" column="deleteTime"/>
+	    <result property="dataState" column="dataState"/>
+	</resultMap>
+	
+	<insert id="save" parameterType="org.framework.authorize.auth.model.AmGroup">
+	    insert into am_group(<include refid="insert_groupColumns"></include>)
+	    values(#{groupId},#{productId},#{parentGroupId},#{groupName},#{groupInfo}
+	    ,#{groupCode},#{isInherit},#{leftValue},#{rightValue},#{createTime},#{editTime}
+	    ,#{deleteTime},#{dataState})
+	</insert>
+	
+	<update id="update" parameterType="org.framework.authorize.auth.model.AmGroup">
+	    update am_group 
+	    set 
+	    PRODUCT_ID=#{productId},
+	    PARENT_GROUP_ID=#{parentGroupId},
+	    GROUP_NAME=#{groupName},
+	    GROUP_INFO=#{groupInfo},
+	    GROUP_CODE=#{groupCode},
+	    IS_INHERIT=#{isInherit},
+	    LEFT_VALUE=#{leftValue},
+	    RIGHT_VALUE=#{rightValue},
+	    CREATE_TIME=#{createTime},
+	    EDIT_TIME=#{editTime},
+	    DELETE_TIME=#{deleteTime},
+	    DATA_STATE=#{dataState}
+	    where GROUP_ID=#{groupId}
+	</update>
+	
+	<delete id="deleteById" parameterType="string">
+	    delete from am_group where GROUP_ID=#{_parameter}
+	</delete>
+	
+	<select id="getById" parameterType="string" resultMap="amGroupMapping">
+	    select <include refid="select_groupColumns"><property name="alias" value=""/></include>
+	    from am_group
+	    where GROUP_ID=#{_parameter}
+	</select>
+	
+	<select id="getAll" resultMap="amGroupMapping">
+	    select <include refid="select_groupColumns"><property name="alias" value=""/></include>
+	    from am_group
+	</select>
+	
+	<select id="getByWhere" resultMap="amGroupMapping">
+	    select <include refid="select_groupColumns"><property name="alias" value=""/></include>
+	    from am_group
+	    <if test="whereSql!=null">
+        	<trim prefix="WHERE" prefixOverrides="OR | AND |WHERE ">${whereSql}</trim>
+	    </if>
+	</select>
+	
+	<select id="getByWherePage" resultMap="amGroupMapping" databaseId="mysql">
+	    select <include refid="select_groupColumns"><property name="alias" value=""/></include>
+	    from am_group
+	    <if test="whereSql!=null">
+        	<trim prefix="WHERE" prefixOverrides="OR | AND |WHERE ">${whereSql}</trim>
+	    </if>
+	    <if test="startIndex!=null and size!=null">
+	        LIMIT #{startIndex,javaType=long},#{size,javaType=long}
+	    </if>
+	</select>
+
+</mapper>

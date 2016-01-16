@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.framework.authorize.base.mapper.BaseMapper">
+	<!-- <cache-ref namespace=""/> -->
+	<select id="selectBySql" resultType="map">
+  	<![CDATA[
+  		${sql}
+  	]]>
+	</select>
+
+	<insert id="insertBySql">
+  	<![CDATA[
+  		${sql}
+  	]]>
+	</insert>
+
+	<delete id="deleteBySql">
+	<![CDATA[
+		${sql}
+	]]>
+	</delete>
+
+	<update id="updateBySql">
+  	<![CDATA[
+  		${sql}
+  	]]>
+	</update>
+
+</mapper>

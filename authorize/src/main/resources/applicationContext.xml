@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	<!-- 读取属性文件 -->
+	<bean id="connection" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:db.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<!-- 配置DBCP数据源 -->
+	<!-- <bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName"
+			value="${driverClassName}">
+		</property>
+		<property name="url"
+			value="${url}">
+		</property>
+		<property name="username" value="${username}"></property>
+		<property name="password" value="${password}"></property>
+	</bean> -->
+	
+	<context:annotation-config/>
+	
+	
+	<!-- 自动扫描dao和service包 -->
+    <!-- <context:component-scan base-package="com.basic.*.dao" /> -->
+    <context:component-scan base-package="org.framework.authorize.*.services" />
+    <context:component-scan base-package="org.framework.authorize.*.dao" />
+	
+	<!-- c3p0数据源 -->
+	<bean id="c3p0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${driverClassName}"></property>
+		<property name="jdbcUrl" value="${url}"></property>
+		<property name="user" value="${username}"></property>
+		<property name="password" value="${password}"></property>
+	</bean>
+	
+	<!-- Hibernate sessionFactory对象 -->
+	<!-- <bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					${dialect}
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>com/entity/Module.hbm.xml</value>
+			</list>
+		</property>
+	</bean> -->
+	<!-- 事务管理对象 -->
+	<!-- <bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean> -->
+	<!-- 声明事务 -->
+	<!-- <tx:advice id="adviceTX" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED"/>
+			<tx:method name="save*" propagation="REQUIRED"/>
+			<tx:method name="update*" propagation="REQUIRED"/>
+			<tx:method name="delete*" propagation="REQUIRED"/>
+			<tx:method name="find*" read-only="true"/>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="*" read-only="true" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:pointcut expression="execution(* com.zt.services.*.*(..))" id="point"/>
+		<aop:advisor advice-ref="adviceTX" pointcut-ref="point"/>
+	</aop:config> -->
+	
+	
+	<!-- mybatis SessionFactory-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="c3p0DataSource"></property>
+		<!-- <property name="configLocation" value="classpath:mybatis.xml"></property> -->
+		<property name="mapperLocations" value="classpath*:org/framework/authorize/*/mapper/*.xml"></property>
+		<property name="databaseIdProvider" ref="vendorDatabaseIdProvider"></property>
+	</bean>
+	
+	<!-- 针对不同数据库做语句适配 -->
+	<bean id="vendorDatabaseIdProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+		<property name="properties">
+			<props>
+				<prop key="SQL Server">sqlserver</prop>  
+                <prop key="DB2">db2</prop>  
+                <prop key="Oracle">oracle</prop>  
+                <prop key="MySQL">mysql</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 配置SqlSessionTemplate -->
+	<!-- <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+	    <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+	</bean> -->
+	
+	<!--  查找类路径下的映射器并自动将它们创建成 MapperFactoryBean -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="org.framework.authorize.*.dao.mapper"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	
+	<!-- 事务配置 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="c3p0DataSource" />
+	</bean>
+	
+	
+	
+	<!-- 事务声明 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED"/>
+			<tx:method name="insert*" propagation="REQUIRED"/>
+			<tx:method name="save*" propagation="REQUIRED"/>
+			<tx:method name="update*" propagation="REQUIRED"/>
+			<tx:method name="delete*" propagation="REQUIRED"/>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="find*" read-only="true"/>
+			<tx:method name="select*" read-only="true"/>
+			<tx:method name="*" read-only="true" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>
+	
+	<!-- 切面 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.basic.*.services.*.*(..))" id="aopPointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="aopPointcut"/>
+	</aop:config>
+	
+</beans>

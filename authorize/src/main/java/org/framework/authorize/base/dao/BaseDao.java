@@ -19,21 +19,25 @@ public interface BaseDao {
 
 	/**
 	 * 执行查询sql
-	 * sql 参数使用方式必须为#{parameters[*]} 的形式，*为参数索引位置
+	 * sql 参数使用方式必须为#{paraName[*]} 的形式
+	 * paraName为指定的参数引用名称，默认为parameters，*为parameters中参数索引位置
 	 * @param sql
+	 * @param paraName
 	 * @param parameters
 	 * @return
 	 */
-	List selectBySql(String sql,Object... parameters);
+	List selectBySql(String sql,String paraName,Object... parameters);
 
 	/**
 	 * 执行查询sql
-	 * sql 参数使用方式必须为#{parameters.*} 的形式，*传入参数的key
+	 * sql 参数使用方式必须为#{paraName.*} 的形式
+	 * araName为指定的参数引用名称，默认为parameters，*传入参数的key
 	 * @param sql
+	 * @param paraName
 	 * @param parameters
 	 * @return
 	 */
-	List selectBySql(String sql,Map<String, Object> parameters);
+	List selectBySql(String sql,String paraName,Map<String, Object> parameters);
 
 	/**
 	 * 执行增加sql（不推荐使用，sql注入风险）
@@ -43,22 +47,26 @@ public interface BaseDao {
 	int insertBySql(String sql);
 
 	/**
-	 * 执行增加sql
-	 * sql 参数使用方式必须为#{parameters[*]} 的形式，*为参数索引位置
+	 * 执行插入sql
+	 * sql 参数使用方式必须为#{paraName[*]} 的形式
+	 * paraName为指定的参数引用名称，默认为parameters，*为parameters中参数索引位置
 	 * @param sql
+	 * @param paraName
 	 * @param parameters
 	 * @return
 	 */
-	int insertBySql(String sql,Object... parameters);
+	int insertBySql(String sql,String paraName,Object... parameters);
 
 	/**
-	 * 执行增加sql
-	 * sql 参数使用方式必须为#{parameters.*} 的形式，*传入参数的key
+	 * 执行插入sql
+	 * sql 参数使用方式必须为#{paraName.*} 的形式
+	 * araName为指定的参数引用名称，默认为parameters，*传入参数的key
 	 * @param sql
+	 * @param paraName
 	 * @param parameters
 	 * @return
 	 */
-	int insertBySql(String sql,Map<String, Object> parameters);
+	int insertBySql(String sql,String paraName,Map<String, Object> parameters);
 
 	/**
 	 * 执行删除sql（不推荐使用，sql注入风险）
@@ -69,21 +77,25 @@ public interface BaseDao {
 
 	/**
 	 * 执行删除sql
-	 * sql 参数使用方式必须为#{parameters[*]} 的形式，*为参数索引位置
+	 * sql 参数使用方式必须为#{paraName[*]} 的形式
+	 * paraName为指定的参数引用名称，默认为parameters，*为parameters中参数索引位置
 	 * @param sql
+	 * @param paraName
 	 * @param parameters
 	 * @return
 	 */
-	int deleteBySql(String sql,Object... parameters);
+	int deleteBySql(String sql,String paraName,Object... parameters);
 	
 	/**
 	 * 执行删除sql
-	 * sql 参数使用方式必须为#{parameters.*} 的形式，*传入参数的key
+	 * sql 参数使用方式必须为#{paraName.*} 的形式
+	 * araName为指定的参数引用名称，默认为parameters，*传入参数的key
 	 * @param sql
+	 * @param paraName
 	 * @param parameters
 	 * @return
 	 */
-	int deleteBySql(String sql,Map<String, Object> parameters);
+	int deleteBySql(String sql,String paraName,Map<String, Object> parameters);
 
 	/**
 	 * 执行修改sql（不推荐使用，sql注入风险）
@@ -94,19 +106,23 @@ public interface BaseDao {
 
 	/**
 	 * 执行修改sql
-	 * sql 参数使用方式必须为#{parameters[*]} 的形式，*为参数索引位置
+	 * sql 参数使用方式必须为#{paraName[*]} 的形式
+	 * paraName为指定的参数引用名称，默认为parameters，*为parameters中参数索引位置
 	 * @param sql
+	 * @param paraName
 	 * @param parameters
 	 * @return
 	 */
-	int updateBySql(String sql,Object... parameters);
+	int updateBySql(String sql,String paraName,Object... parameters);
 	
 	/**
 	 * 执行修改sql
-	 * sql 参数使用方式必须为#{parameters.*} 的形式，*传入参数的key
+	 * sql 参数使用方式必须为#{paraName.*} 的形式
+	 * araName为指定的参数引用名称，默认为parameters，*传入参数的key
 	 * @param sql
+	 * @param paraName
 	 * @param parameters
 	 * @return
 	 */
-	int updateBySql(String sql,Map<String, Object> parameters);
+	int updateBySql(String sql,String paraName,Map<String, Object> parameters);
 }

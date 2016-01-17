@@ -41,10 +41,11 @@ public class BaseDaoImpl extends SqlSessionDaoSupport implements BaseDao {
 	}
 
 	@Override
-	public List selectBySql(String sql, Object... parameters) {
+	public List selectBySql(String sql,String paraName, Object... parameters) {
+		if(paraName==null||"".equals(paraName.trim())) paraName="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
 		paraWarp.put("sql", sql);
-		paraWarp.put("parameters", parameters);
+		paraWarp.put(paraName, parameters);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>parameters warp map:"+parameters);
 		}
@@ -56,10 +57,11 @@ public class BaseDaoImpl extends SqlSessionDaoSupport implements BaseDao {
 	}
 
 	@Override
-	public List selectBySql(String sql, Map<String, Object> parameters) {
+	public List selectBySql(String sql,String paraName, Map<String, Object> parameters) {
+		if(paraName==null||"".equals(paraName.trim())) paraName="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
 		paraWarp.put("sql", sql);
-		paraWarp.put("parameters", parameters);
+		paraWarp.put(paraName, parameters);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>parameters warp map:"+parameters);
 		}
@@ -85,10 +87,11 @@ public class BaseDaoImpl extends SqlSessionDaoSupport implements BaseDao {
 	}
 
 	@Override
-	public int insertBySql(String sql, Object... parameters) {
+	public int insertBySql(String sql,String paraName, Object... parameters) {
+		if(paraName==null||"".equals(paraName.trim())) paraName="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
 		paraWarp.put("sql", sql);
-		paraWarp.put("parameters", parameters);
+		paraWarp.put(paraName, parameters);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>parameters warp map:"+paraWarp);
 		}
@@ -100,10 +103,11 @@ public class BaseDaoImpl extends SqlSessionDaoSupport implements BaseDao {
 	}
 
 	@Override
-	public int insertBySql(String sql, Map<String, Object> parameters) {
+	public int insertBySql(String sql,String paraName, Map<String, Object> parameters) {
+		if(paraName==null||"".equals(paraName.trim())) paraName="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
 		paraWarp.put("sql", sql);
-		paraWarp.put("parameters", parameters);
+		paraWarp.put(paraName, parameters);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>parameters warp map:"+paraWarp);
 		}
@@ -129,10 +133,11 @@ public class BaseDaoImpl extends SqlSessionDaoSupport implements BaseDao {
 	}
 
 	@Override
-	public int deleteBySql(String sql, Object... parameters) {
+	public int deleteBySql(String sql,String paraName, Object... parameters) {
+		if(paraName==null||"".equals(paraName.trim())) paraName="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
 		paraWarp.put("sql", sql);
-		paraWarp.put("parameters", parameters);
+		paraWarp.put(paraName, parameters);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>parameters warp map:"+paraWarp);
 		}
@@ -144,10 +149,11 @@ public class BaseDaoImpl extends SqlSessionDaoSupport implements BaseDao {
 	}
 
 	@Override
-	public int deleteBySql(String sql, Map<String, Object> parameters) {
+	public int deleteBySql(String sql,String paraName, Map<String, Object> parameters) {
+		if(paraName==null||"".equals(paraName.trim())) paraName="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
 		paraWarp.put("sql", sql);
-		paraWarp.put("parameters", parameters);
+		paraWarp.put(paraName, parameters);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>parameters warp map:"+paraWarp);
 		}
@@ -173,10 +179,11 @@ public class BaseDaoImpl extends SqlSessionDaoSupport implements BaseDao {
 	}
 
 	@Override
-	public int updateBySql(String sql, Object... parameters) {
+	public int updateBySql(String sql,String paraName, Object... parameters) {
+		if(paraName==null||"".equals(paraName.trim())) paraName="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
 		paraWarp.put("sql", sql);
-		paraWarp.put("parameters", parameters);
+		paraWarp.put(paraName, parameters);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>parameters warp map:"+paraWarp);
 		}
@@ -188,10 +195,11 @@ public class BaseDaoImpl extends SqlSessionDaoSupport implements BaseDao {
 	}
 
 	@Override
-	public int updateBySql(String sql, Map<String, Object> parameters) {
+	public int updateBySql(String sql,String paraName, Map<String, Object> parameters) {
+		if(paraName==null||"".equals(paraName.trim())) paraName="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
 		paraWarp.put("sql", sql);
-		paraWarp.put("parameters", parameters);
+		paraWarp.put(paraName, parameters);
 		if(LOG.isDebugEnabled()){
 			LOG.debug(">>>>parameters warp map:"+paraWarp);
 		}

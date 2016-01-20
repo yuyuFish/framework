@@ -95,7 +95,7 @@
 	    select <include refid="select_groupColumns"><property name="alias" value=""/></include>
 	    from am_group
 	    <if test="whereSql!=null">
-        	<trim prefix="WHERE" prefixOverrides="OR | AND |WHERE ">${whereSql}</trim>
+        	<trim prefix="WHERE" prefixOverrides="OR |AND |WHERE ">${whereSql}</trim>
 	    </if>
 	</select>
 	
@@ -103,7 +103,7 @@
 	    select <include refid="select_groupColumns"><property name="alias" value=""/></include>
 	    from am_group
 	    <if test="whereSql!=null">
-        	<trim prefix="WHERE" prefixOverrides="OR | AND |WHERE ">${whereSql}</trim>
+        	<trim prefix="WHERE" prefixOverrides="OR |AND |WHERE ">${whereSql}</trim>
 	    </if>
 	    <if test="startIndex!=null and size!=null">
 	        LIMIT #{startIndex,javaType=long},#{size,javaType=long}

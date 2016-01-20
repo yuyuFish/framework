@@ -19,9 +19,9 @@ public class SysResources implements Serializable {
 	private Integer resourcesType;	//资源类型		RESOURCES_TYPE int,
 	private String requestUrl;	//资源请求路径	 REQUEST_URL varchar(1024),
 	private String areaId;		//区域id（暂定）	AREA_ID varchar(128),
-	private Long sort;		//排序	SORT int
 	private Long leftValue;  	//左值	LEFT_VALUE bigint
 	private Long rightValue;	//右值	RIGHT_VALUE bigint
+	private Long sort;		//排序	SORT int
 	private Date createTime;		//数据创建时间	CREATE_TIME datetime
 	private Date editTime;			//数据修改时间	EDIT_TIME datetime
 	private Date deleteTime;		//数据删除时间	DELETE_TIME datetime

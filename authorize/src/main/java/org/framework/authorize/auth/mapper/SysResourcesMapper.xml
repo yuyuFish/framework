@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.framework.authorize.auth.mapper.SysResourcesMapper">
+	<!-- <cache-ref namespace=""/> -->
+	
+	<sql id="select_resourcesColumns">
+	    ${alias}RESOURCES_ID as resourcesId
+		,${alias}PRODUCT_ID as productId
+		,${alias}PARENT_RESOURCES_ID as parentResourcesId
+		,${alias}RESOURCES_NAME as resourcesName
+		,${alias}RESOURCES_INFO as resourcesInfo
+		,${alias}RESOURCES_CODE as resourcesCode
+		,${alias}RESOURCES_TYPE as resourcesType
+		,${alias}REQUEST_URL as requestUrl
+		,${alias}AREA_ID as areaId
+		,${alias}LEFT_VALUE as leftValue
+		,${alias}RIGHT_VALUE as rightValue
+		,${alias}SORT as sort
+		,${alias}CREATE_TIME as createTime
+		,${alias}EDIT_TIME as editTime
+		,${alias}DELETE_TIME as deleteTime
+		,${alias}DATA_STATE as dataState
+	</sql>
+	
+	<sql id="insert_resourcesColumns">
+	    RESOURCES_ID
+		,PRODUCT_ID
+		,PARENT_RESOURCES_ID
+		,RESOURCES_NAME
+		,RESOURCES_INFO
+		,RESOURCES_CODE
+		,RESOURCES_TYPE
+		,REQUEST_URL
+		,AREA_ID
+		,LEFT_VALUE
+		,RIGHT_VALUE
+		,SORT
+		,CREATE_TIME
+		,EDIT_TIME
+		,DELETE_TIME
+		,DATA_STATE
+	</sql>
+	
+	<resultMap type="org.framework.authorize.auth.model.SysResources" id="sysResourcesMapping" autoMapping="true">
+	    <id property="resourcesId" column="resourcesId" />
+		<result property="productId" column="productId" />
+		<result property="parentResourcesId" column="parentResourcesId" />
+		<result property="resourcesName" column="resourcesName" />
+		<result property="resourcesInfo" column="resourcesInfo" />
+		<result property="resourcesCode" column="resourcesCode" />
+		<result property="resourcesType" column="resourcesType" />
+		<result property="requestUrl" column="requestUrl" />
+		<result property="areaId" column="areaId" />
+		<result property="leftValue" column="leftValue" />
+		<result property="rightValue" column="rightValue" />
+		<result property="sort" column="sort" />
+		<result property="createTime" column="createTime" />
+		<result property="editTime" column="editTime" />
+		<result property="deleteTime" column="deleteTime" />
+		<result property="dataState" column="dataState" />
+	</resultMap>
+	
+	<insert id="save" parameterType="org.framework.authorize.auth.model.SysResources">
+	    insert into sys_resources(<include refid="insert_resourcesColumns"></include>)
+	    values(
+		    #{resourcesId},
+			#{productId},
+			#{parentResourcesId},
+			#{resourcesName},
+			#{resourcesInfo},
+			#{resourcesCode},
+			#{resourcesType},
+			#{requestUrl},
+			#{areaId},
+			#{leftValue},
+			#{rightValue},
+			#{sort},
+			#{createTime},
+			#{editTime},
+			#{deleteTime},
+			#{dataState}
+	    )
+	</insert>
+	
+	<update id="update" parameterType="org.framework.authorize.auth.model.SysResources">
+	    update sys_resources 
+	    set 
+	    PRODUCT_ID=#{productId}
+		,PARENT_RESOURCES_ID=#{parentResourcesId}
+		,RESOURCES_NAME=#{resourcesName}
+		,RESOURCES_INFO=#{resourcesInfo}
+		,RESOURCES_CODE=#{resourcesCode}
+		,RESOURCES_TYPE=#{resourcesType}
+		,REQUEST_URL=#{requestUrl}
+		,AREA_ID=#{areaId}
+		,LEFT_VALUE=#{leftValue}
+		,RIGHT_VALUE=#{rightValue}
+		,SORT=#{sort}
+		,CREATE_TIME=#{createTime}
+		,EDIT_TIME=#{editTime}
+		,DELETE_TIME=#{deleteTime}
+		,DATA_STATE=#{dataState}
+	    where RESOURCES_ID=#{resourcesId}
+	</update>
+	
+	<delete id="deleteById" parameterType="string">
+	    delete from sys_resources where RESOURCES_ID=#{_parameter}
+	</delete>
+	
+	<select id="getById" parameterType="string" resultMap="sysResourcesMapping">
+	    select <include refid="select_resourcesColumns"><property name="alias" value=""/></include>
+	    from sys_resources
+	    where RESOURCES_ID=#{_parameter}
+	</select>
+	
+	<select id="getAll" resultMap="sysResourcesMapping">
+	    select <include refid="select_resourcesColumns"><property name="alias" value=""/></include>
+	    from sys_resources
+	</select>
+	
+	<select id="getByWhere" resultMap="sysResourcesMapping">
+	    select <include refid="select_resourcesColumns"><property name="alias" value=""/></include>
+	    from sys_resources
+	    <if test="whereSql!=null">
+        	<trim prefix="WHERE" prefixOverrides="OR |AND |WHERE ">${whereSql}</trim>
+	    </if>
+	</select>
+	
+	<select id="getByWherePage" resultMap="sysResourcesMapping" databaseId="mysql">
+	    select <include refid="select_resourcesColumns"><property name="alias" value=""/></include>
+	    from sys_resources
+	    <if test="whereSql!=null">
+        	<trim prefix="WHERE" prefixOverrides="OR |AND |WHERE ">${whereSql}</trim>
+	    </if>
+	    <if test="startIndex!=null and size!=null">
+	        LIMIT #{startIndex,javaType=long},#{size,javaType=long}
+	    </if>
+	</select>
+
+</mapper>

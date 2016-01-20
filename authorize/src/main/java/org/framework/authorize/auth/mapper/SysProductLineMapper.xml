@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.framework.authorize.auth.mapper.SysProductLineMapper">
+	<!-- <cache-ref namespace=""/> -->
+	
+	<sql id="select_productLineColumns">
+	    ${alias}PRODUCT_ID as productId
+		,${alias}PARENT_PRODUCT_ID as parentProductId
+		,${alias}PRODUCT_NAME as productName
+		,${alias}PRODUCT_INFO as productInfo
+		,${alias}PRODUCT_PROTOCOL as productProtocol
+		,${alias}PRODUCT_HOSTNAME as productHostName
+		,${alias}PRODUCT_IP as productIp
+		,${alias}PRODUCT_PORT as productPort
+		,${alias}PRODUCT_CODE as productCode
+		,${alias}LEFT_VALUE as leftValue
+		,${alias}RIGHT_VALUE as rightValue
+		,${alias}CREATE_TIME as createTime
+		,${alias}EDIT_TIME as editTime
+		,${alias}DELETE_TIME as deleteTime
+		,${alias}DATA_STATE as dataState
+	</sql>
+	
+	<sql id="insert_productLineColumns">
+	    PRODUCT_ID
+		,PARENT_PRODUCT_ID
+		,PRODUCT_NAME
+		,PRODUCT_INFO
+		,PRODUCT_PROTOCOL
+		,PRODUCT_HOSTNAME
+		,PRODUCT_IP
+		,PRODUCT_PORT
+		,PRODUCT_CODE
+		,LEFT_VALUE
+		,RIGHT_VALUE
+		,CREATE_TIME
+		,EDIT_TIME
+		,DELETE_TIME
+		,DATA_STATE
+	</sql>
+	
+	<resultMap type="org.framework.authorize.auth.model.SysProductLine" id="sysProductLineMapping" autoMapping="true">
+	    <id property="productId" column="productId" />
+		<result property="parentProductId" column="parentProductId" />
+		<result property="productName" column="productName" />
+		<result property="productInfo" column="productInfo" />
+		<result property="productProtocol" column="productProtocol" />
+		<result property="productHostName" column="productHostName" />
+		<result property="productIp" column="productIp" />
+		<result property="productPort" column="productPort" />
+		<result property="productCode" column="productCode" />
+		<result property="leftValue" column="leftValue" />
+		<result property="rightValue" column="rightValue" />
+		<result property="createTime" column="createTime" />
+		<result property="editTime" column="editTime" />
+		<result property="deleteTime" column="deleteTime" />
+		<result property="dataState" column="dataState" />
+	</resultMap>
+	
+	<insert id="save" parameterType="org.framework.authorize.auth.model.SysProductLine">
+	    insert into sys_product_line(<include refid="insert_productLineColumns"></include>)
+	    values(
+		    #{productId},
+			#{parentProductId},
+			#{productName},
+			#{productInfo},
+			#{productProtocol},
+			#{productHostName},
+			#{productIp},
+			#{productPort},
+			#{productCode},
+			#{leftValue},
+			#{rightValue},
+			#{createTime},
+			#{editTime},
+			#{deleteTime},
+			#{dataState}
+	    )
+	</insert>
+	
+	<update id="update" parameterType="org.framework.authorize.auth.model.AmRole">
+	    update sys_product_line 
+	    set 
+	    ,PARENT_PRODUCT_ID=#{parentProductId}
+		,PRODUCT_NAME=#{productName}
+		,PRODUCT_INFO=#{productInfo}
+		,PRODUCT_PROTOCOL=#{productProtocol}
+		,PRODUCT_HOSTNAME=#{productHostName}
+		,PRODUCT_IP=#{productIp}
+		,PRODUCT_PORT=#{productPort}
+		,PRODUCT_CODE=#{productCode}
+		,LEFT_VALUE=#{leftValue}
+		,RIGHT_VALUE=#{rightValue}
+		,CREATE_TIME=#{createTime}
+		,EDIT_TIME=#{editTime}
+		,DELETE_TIME=#{deleteTime}
+		,DATA_STATE=#{dataState}
+	    where PRODUCT_ID=#{productId}
+	</update>
+	
+	<delete id="deleteById" parameterType="string">
+	    delete from sys_product_line where PRODUCT_ID=#{_parameter}
+	</delete>
+	
+	<select id="getById" parameterType="string" resultMap="sysProductLineMapping">
+	    select <include refid="select_productLineColumns"><property name="alias" value=""/></include>
+	    from sys_product_line
+	    where PRODUCT_ID=#{_parameter}
+	</select>
+	
+	<select id="getAll" resultMap="sysProductLineMapping">
+	    select <include refid="select_productLineColumns"><property name="alias" value=""/></include>
+	    from sys_product_line
+	</select>
+	
+	<select id="getByWhere" resultMap="sysProductLineMapping">
+	    select <include refid="select_productLineColumns"><property name="alias" value=""/></include>
+	    from sys_product_line
+	    <if test="whereSql!=null">
+        	<trim prefix="WHERE" prefixOverrides="OR |AND |WHERE ">${whereSql}</trim>
+	    </if>
+	</select>
+	
+	<select id="getByWherePage" resultMap="sysProductLineMapping" databaseId="mysql">
+	    select <include refid="select_productLineColumns"><property name="alias" value=""/></include>
+	    from sys_product_line
+	    <if test="whereSql!=null">
+        	<trim prefix="WHERE" prefixOverrides="OR |AND |WHERE ">${whereSql}</trim>
+	    </if>
+	    <if test="startIndex!=null and size!=null">
+	        LIMIT #{startIndex,javaType=long},#{size,javaType=long}
+	    </if>
+	</select>
+
+</mapper>

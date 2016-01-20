@@ -89,21 +89,21 @@
 	<update id="update" parameterType="org.framework.authorize.auth.model.AmPermission">
 	    update am_permission 
 	    set 
-	    PRODUCT_ID=#{productId},
-		,PERMISSION_NAME=#{permissionName},
-		,PERMISSION_INFO=#{permissionInfo},
-		,PERMISSION_URL=#{permissionUrl},
-		,PERMISSION_CODE=#{permissionCode},
-		,OPERATE_IP=#{operateIp},
-		,OPERATE_TYPE=#{operateType},
-		,REQUEST_TYPE=#{requestType},
-		,REQUEST_HEADERS=#{requestHeaders},
-		,REQUEST_PARAMETERS=#{requestParameters},
-		,LOGIC_TYPE=#{logicType},
-		,PERMISSION_CLASS_METHOD=#{permissionClassMethod},
-		,CREATE_TIME=#{createTime},
-		,EDIT_TIME=#{editTime},
-		,DELETE_TIME=#{deleteTime},
+	    PRODUCT_ID=#{productId}
+		,PERMISSION_NAME=#{permissionName}
+		,PERMISSION_INFO=#{permissionInfo}
+		,PERMISSION_URL=#{permissionUrl}
+		,PERMISSION_CODE=#{permissionCode}
+		,OPERATE_IP=#{operateIp}
+		,OPERATE_TYPE=#{operateType}
+		,REQUEST_TYPE=#{requestType}
+		,REQUEST_HEADERS=#{requestHeaders}
+		,REQUEST_PARAMETERS=#{requestParameters}
+		,LOGIC_TYPE=#{logicType}
+		,PERMISSION_CLASS_METHOD=#{permissionClassMethod}
+		,CREATE_TIME=#{createTime}
+		,EDIT_TIME=#{editTime}
+		,DELETE_TIME=#{deleteTime}
 		,DATA_STATE=#{dataState}
 	    where PERMISSION_ID=#{permissionId}
 	</update>
@@ -127,7 +127,7 @@
 	    select <include refid="select_permissionColumns"><property name="alias" value=""/></include>
 	    from am_permission
 	    <if test="whereSql!=null">
-        	<trim prefix="WHERE" prefixOverrides="OR | AND |WHERE ">${whereSql}</trim>
+        	<trim prefix="WHERE" prefixOverrides="OR |AND |WHERE ">${whereSql}</trim>
 	    </if>
 	</select>
 	
@@ -135,7 +135,7 @@
 	    select <include refid="select_permissionColumns"><property name="alias" value=""/></include>
 	    from am_permission
 	    <if test="whereSql!=null">
-        	<trim prefix="WHERE" prefixOverrides="OR | AND |WHERE ">${whereSql}</trim>
+        	<trim prefix="WHERE" prefixOverrides="OR |AND |WHERE ">${whereSql}</trim>
 	    </if>
 	    <if test="startIndex!=null and size!=null">
 	        LIMIT #{startIndex,javaType=long},#{size,javaType=long}

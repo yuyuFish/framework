@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.framework.authorize.auth.mapper.AmRoleMapper">
+	<!-- <cache-ref namespace=""/> -->
+	
+	<sql id="select_roleColumns">
+	    ${alias}ROLE_ID as roleId
+		,${alias}PRODUCT_ID as productId
+		,${alias}PARENT_ROLE_ID as parentRoleId
+		,${alias}ROLE_NAME as roleName
+		,${alias}ROLE_INFO as roleInfo
+		,${alias}ROLE_CODE as roleCode
+		,${alias}IS_INHERIT as isInherit
+		,${alias}LEFT_VALUE as leftValue
+		,${alias}RIGHT_VALUE as rightValue
+		,${alias}CREATE_TIME as createTime
+		,${alias}EDIT_TIME as editTime
+		,${alias}DELETE_TIME as deleteTime
+		,${alias}DATA_STATE as dataState
+	</sql>
+	
+	<sql id="insert_roleColumns">
+	    ROLE_ID
+		,PRODUCT_ID
+		,PARENT_ROLE_ID
+		,ROLE_NAME
+		,ROLE_INFO
+		,ROLE_CODE
+		,IS_INHERIT
+		,LEFT_VALUE
+		,RIGHT_VALUE
+		,CREATE_TIME
+		,EDIT_TIME
+		,DELETE_TIME
+		,DATA_STATE
+	</sql>
+	
+	<resultMap type="org.framework.authorize.auth.model.AmRole" id="amRoleMapping" autoMapping="true">
+	    <id property="roleId" column="roleId" />
+		<result property="productId" column="productId" />
+		<result property="parentRoleId" column="parentRoleId" />
+		<result property="roleName" column="roleName" />
+		<result property="roleInfo" column="roleInfo" />
+		<result property="roleCode" column="roleCode" />
+		<result property="isInherit" column="isInherit" />
+		<result property="leftValue" column="leftValue" />
+		<result property="rightValue" column="rightValue" />
+		<result property="createTime" column="createTime" />
+		<result property="editTime" column="editTime" />
+		<result property="deleteTime" column="deleteTime" />
+		<result property="dataState" column="dataState" />
+	</resultMap>
+	
+	<insert id="save" parameterType="org.framework.authorize.auth.model.AmRole">
+	    insert into am_role(<include refid="insert_roleColumns"></include>)
+	    values(
+		    #{roleId},
+			#{productId},
+			#{parentRoleId},
+			#{roleName},
+			#{roleInfo},
+			#{roleCode},
+			#{isInherit},
+			#{leftValue},
+			#{rightValue},
+			#{createTime},
+			#{editTime},
+			#{deleteTime},
+			#{dataState}
+	    )
+	</insert>
+	
+	<update id="update" parameterType="org.framework.authorize.auth.model.AmRole">
+	    update am_role 
+	    set 
+	    PRODUCT_ID=#{productId}
+		,PARENT_ROLE_ID=#{parentRoleId}
+		,ROLE_NAME=#{roleName}
+		,ROLE_INFO=#{roleInfo}
+		,ROLE_CODE=#{roleCode}
+		,IS_INHERIT=#{isInherit}
+		,LEFT_VALUE=#{leftValue}
+		,RIGHT_VALUE=#{rightValue}
+		,CREATE_TIME=#{createTime}
+		,EDIT_TIME=#{editTime}
+		,DELETE_TIME=#{deleteTime}
+		,DATA_STATE=#{dataState}
+	    where ROLE_ID=#{roleId}
+	</update>
+	
+	<delete id="deleteById" parameterType="string">
+	    delete from am_role where ROLE_ID=#{_parameter}
+	</delete>
+	
+	<select id="getById" parameterType="string" resultMap="amRoleMapping">
+	    select <include refid="select_roleColumns"><property name="alias" value=""/></include>
+	    from am_role
+	    where ROLE_ID=#{_parameter}
+	</select>
+	
+	<select id="getAll" resultMap="amRoleMapping">
+	    select <include refid="select_roleColumns"><property name="alias" value=""/></include>
+	    from am_role
+	</select>
+	
+	<select id="getByWhere" resultMap="amRoleMapping">
+	    select <include refid="select_roleColumns"><property name="alias" value=""/></include>
+	    from am_role
+	    <if test="whereSql!=null">
+        	<trim prefix="WHERE" prefixOverrides="OR |AND |WHERE ">${whereSql}</trim>
+	    </if>
+	</select>
+	
+	<select id="getByWherePage" resultMap="amRoleMapping" databaseId="mysql">
+	    select <include refid="select_roleColumns"><property name="alias" value=""/></include>
+	    from am_role
+	    <if test="whereSql!=null">
+        	<trim prefix="WHERE" prefixOverrides="OR |AND |WHERE ">${whereSql}</trim>
+	    </if>
+	    <if test="startIndex!=null and size!=null">
+	        LIMIT #{startIndex,javaType=long},#{size,javaType=long}
+	    </if>
+	</select>
+
+</mapper>

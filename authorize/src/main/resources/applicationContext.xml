@@ -149,7 +149,7 @@
 	
 	<!-- 切面 -->
 	<aop:config>
-		<aop:pointcut expression="execution(* com.basic.*.services.*.*(..))" id="aopPointcut"/>
+		<aop:pointcut expression="execution(* org.framework.authorize.*.services.*.*(..))" id="aopPointcut"/>
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="aopPointcut"/>
 	</aop:config>
 	

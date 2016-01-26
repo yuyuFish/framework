@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @version  
  * @date  2016年1月25日 下午5:45:14
  */
-public class ConstDate implements Serializable {
+public class ConstData implements Serializable {
 	/**
 	 * 正常数据库数据
 	 */

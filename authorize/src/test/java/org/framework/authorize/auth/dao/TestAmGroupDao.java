@@ -74,9 +74,9 @@ public class TestAmGroupDao extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void testGetByWhere(){
 		Map<String, Object> map=new HashMap<String, Object>();
-		map.put("groupId", "5a6e33e98c1b4ebfa8c4cf5d71fe80e8");
-		List<AmGroup> result=amGroupDao.getByWhere("where GROUP_ID=#{pa.groupId}", "pa", map);
-		System.out.println(result.size());
+		map.put("groupId", null);
+		List<AmGroup> result=amGroupDao.getByWhere("where PARENT_GROUP_ID is #{pa.groupId}", "pa", map);
+		System.out.println("$$$$:"+result.size());
 	}
 	
 	@Test

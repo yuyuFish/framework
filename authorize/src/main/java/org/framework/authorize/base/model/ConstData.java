@@ -17,4 +17,9 @@ public class ConstData implements Serializable {
 	 * 删除状态数据库数据
 	 */
 	public static final String DATA_DELETE="delete";
+	
+	/**
+	 * 临时状态数据
+	 */
+	public static final String DATA_TEMP="temp";
 }

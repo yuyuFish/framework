@@ -88,8 +88,46 @@ public class AmGroupDaoImpl extends BaseDaoImpl implements AmGroupDao {
 	}
 
 	@Override
-	public List<AmGroup> getByWherePage(String whereSql, String paraKey,
-			Map<String, Object> parameters, Long startIndex, Long size) {
+	public List<AmGroup> getByWherePage(String whereSql, Long startIndex, Long size
+			, String paraKey, Map<String, Object> parameters) {
+		if(paraKey==null||"".equals(paraKey.trim())) paraKey="parameters";
+		Map<String, Object> paraWarp=new HashMap<String, Object>();
+		paraWarp.put("whereSql", whereSql);
+		paraWarp.put(paraKey, parameters);
+		paraWarp.put("startIndex", startIndex);
+		paraWarp.put("size", size);
+		if(LOG.isDebugEnabled()){
+			LOG.debug(">>>>parameters warp map:"+parameters);
+		}
+		List<AmGroup> result=getSqlSession().selectList("org.framework.authorize.auth.mapper.AmGroupMapper.getByWherePage",paraWarp);
+		if(LOG.isDebugEnabled()){
+			LOG.debug(">>>>result size:"+(result==null?"null":result.size()));
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<AmGroup> getByWhere(String whereSql, String paraKey,
+			Object... parameters) {
+		if(paraKey==null||"".equals(paraKey.trim())) paraKey="parameters";
+		Map<String, Object> paraWarp=new HashMap<String, Object>();
+		paraWarp.put("whereSql", whereSql);
+		paraWarp.put(paraKey, parameters);
+		if(LOG.isDebugEnabled()){
+			LOG.debug(">>>>parameters warp map:"+parameters);
+		}
+		List<AmGroup> result=getSqlSession().selectList("org.framework.authorize.auth.mapper.AmGroupMapper.getByWhere",paraWarp);
+		if(LOG.isDebugEnabled()){
+			LOG.debug(">>>>result size:"+(result==null?"null":result.size()));
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<AmGroup> getByWherePage(String whereSql, Long startIndex,
+			Long size, String paraKey, Object... parameters) {
 		if(paraKey==null||"".equals(paraKey.trim())) paraKey="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
 		paraWarp.put("whereSql", whereSql);

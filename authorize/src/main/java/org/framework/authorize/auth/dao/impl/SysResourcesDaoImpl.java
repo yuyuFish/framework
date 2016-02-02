@@ -88,8 +88,46 @@ public class SysResourcesDaoImpl extends BaseDaoImpl implements SysResourcesDao 
 	}
 
 	@Override
-	public List<SysResources> getByWherePage(String whereSql, String paraKey,
-			Map<String, Object> parameters, Long startIndex, Long size) {
+	public List<SysResources> getByWherePage(String whereSql, Long startIndex, Long size
+			, String paraKey,Map<String, Object> parameters) {
+		if(paraKey==null||"".equals(paraKey.trim())) paraKey="parameters";
+		Map<String, Object> paraWarp=new HashMap<String, Object>();
+		paraWarp.put("whereSql", whereSql);
+		paraWarp.put(paraKey, parameters);
+		paraWarp.put("startIndex", startIndex);
+		paraWarp.put("size", size);
+		if(LOG.isDebugEnabled()){
+			LOG.debug(">>>>parameters warp map:"+parameters);
+		}
+		List<SysResources> result=getSqlSession().selectList("org.framework.authorize.auth.mapper.SysResourcesMapper.getByWherePage",paraWarp);
+		if(LOG.isDebugEnabled()){
+			LOG.debug(">>>>result size:"+(result==null?"null":result.size()));
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<SysResources> getByWhere(String whereSql, String paraKey,
+			Object... parameters) {
+		if(paraKey==null||"".equals(paraKey.trim())) paraKey="parameters";
+		Map<String, Object> paraWarp=new HashMap<String, Object>();
+		paraWarp.put("whereSql", whereSql);
+		paraWarp.put(paraKey, parameters);
+		if(LOG.isDebugEnabled()){
+			LOG.debug(">>>>parameters warp map:"+parameters);
+		}
+		List<SysResources> result=getSqlSession().selectList("org.framework.authorize.auth.mapper.SysResourcesMapper.getByWhere",paraWarp);
+		if(LOG.isDebugEnabled()){
+			LOG.debug(">>>>result size:"+(result==null?"null":result.size()));
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<SysResources> getByWherePage(String whereSql, Long startIndex,
+			Long size, String paraKey, Object... parameters) {
 		if(paraKey==null||"".equals(paraKey.trim())) paraKey="parameters";
 		Map<String, Object> paraWarp=new HashMap<String, Object>();
 		paraWarp.put("whereSql", whereSql);

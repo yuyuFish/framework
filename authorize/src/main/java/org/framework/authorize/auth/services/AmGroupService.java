@@ -1,8 +1,10 @@
 package org.framework.authorize.auth.services;
 
 import java.util.List;
+import java.util.Map;
 
 import org.framework.authorize.auth.model.AmGroup;
+import org.framework.authorize.base.utils.Pager;
 
 /**
  * 用户组service
@@ -12,19 +14,72 @@ import org.framework.authorize.auth.model.AmGroup;
  */
 public interface AmGroupService {
 	/**
-	 * 添加一条group
-	 * @param amGroup
+	 * 根据id查询一条数据
+	 * @param groupId
+	 * @return
 	 */
-	void addGroup(AmGroup amGroup);
+	AmGroup getById(String groupId);
+	
 	
 	/**
-	 * 更新一条group
+	 * 条件查询
+	 * @param whereStr where 条件
+	 * @param paraKey where条件中所使用的参数键 如#{paraKey.[index]} 
+	 * paraKey是你想使用的键名默认为parameters，
+	 *  “index” 为parameters 索引位置
+	 * @param parameters where条件中的对应参数
+	 * @return
+	 */
+	List<AmGroup> getByWhere(String whereSql,String paraKey,Object... parameters);
+	
+	/**
+	 * 条件查询
+	 * @param whereStr where 条件
+	 * @param paraKey where条件中所使用的参数键 如#{paraKey.*} 
+	 * paraKey是你想使用的键名默认为parameters，
+	 *  “*” 为parameters map中的key
+	 * @param parameters where条件中的对应参数
+	 * @return
+	 */
+	List<AmGroup> getByWhere(String whereSql,String paraKey,Map<String, Object> parameters);
+	
+	
+	/**
+	 * 分页条件查询
+	 * @param page 分页信息
+	 * @param whereSql	where 条件
+	 * @param paraKey where条件中所使用的参数键 如#{paraKey.[index]} 
+	 * paraKey是你想使用的键名默认为parameters，
+	 *  “index” 为parameters 索引位置
+	 * @param parameters where条件中的对应参数
+	 */
+	void getByWherePage(Pager<AmGroup> page,String whereSql,String paraKey,Object... parameters);
+	
+	
+	/**
+	 * 分页条件查询
+	 * @param page	分页信息
+	 * @param whereSql where 条件
+	  * @param paraKey where条件中所使用的参数键 如#{paraKey.*} 
+	 * paraKey是你想使用的键名默认为parameters，
+	 *  “*” 为parameters map中的key
+	 * @param parameters	where条件中的对应参数
+	 */
+	void getByWherePage(Pager<AmGroup> page,String whereSql,String paraKey,Map<String, Object> parameters);
+	/**
+	 * 添加一条信息
+	 * @param amGroup
+	 */
+	void add(AmGroup amGroup);
+	
+	/**
+	 * 更新一条信息
 	 * 该更新只能更新基础信息，不能更新节点位置，顺序及数据状态
 	 * 可更新字段如下:
 	 * groupName,groupInfo,groupCode,isInherit
 	 * @param amGroup
 	 */
-	void updateGroup(AmGroup amGroup);
+	void update(AmGroup amGroup);
 	
 	/**
 	 * 更新节点位置

@@ -13,6 +13,7 @@ import org.framework.authorize.auth.dao.AmGroupDao;
 import org.framework.authorize.auth.model.AmGroup;
 import org.framework.authorize.auth.services.AmGroupService;
 import org.framework.authorize.base.model.ConstData;
+import org.framework.authorize.base.utils.Pager;
 import org.springframework.stereotype.Service;
 /**
  * 采用左右值实现树形结构（测试中，有待优化）
@@ -29,7 +30,7 @@ public class AmGroupServiceImpl implements AmGroupService {
 	private AmGroupDao amGroupDao;
 	
 	@Override
-	public void addGroup(AmGroup amGroup) {
+	public void add(AmGroup amGroup) {
 		Long leftValue=1L;
 		Long rightValue=2L;
 		
@@ -71,7 +72,7 @@ public class AmGroupServiceImpl implements AmGroupService {
 	}
 
 	@Override
-	public void updateGroup(AmGroup amGroup) {
+	public void update(AmGroup amGroup) {
 		if(amGroup.getGroupId()==null) throw new RuntimeException(">>>>groupId is null");
 		AmGroup dbGroup=amGroupDao.getById(amGroup.getGroupId());
 		if(dbGroup==null)throw new RuntimeException(">>>>["+amGroup.getGroupId()+"] update node non-existent");
@@ -369,6 +370,71 @@ public class AmGroupServiceImpl implements AmGroupService {
 		LOG.debug(">>>>result:"+result);
 		return result;
 	}
+
+	@Override
+	public AmGroup getById(String groupId) {
+		
+		return amGroupDao.getById(groupId);
+	}
+
+	@Override
+	public List<AmGroup> getByWhere(String whereSql, String paraKey,
+			Object... parameters) {
+		
+		return amGroupDao.getByWhere(whereSql, paraKey, parameters);
+	}
+
+	@Override
+	public List<AmGroup> getByWhere(String whereSql, String paraKey,
+			Map<String, Object> parameters) {
+		
+		return amGroupDao.getByWhere(whereSql, paraKey, parameters);
+	}
+
+	@Override
+	public void getByWherePage(Pager<AmGroup> page, String whereSql,
+			String paraKey, Object... parameters) {
+		page.init();
+		String where="";
+		if(whereSql!=null&&!"".equals(whereSql.trim())){
+			where="WHERE "+whereSql.replaceAll("^\\s*(?i)where\\s+", "");
+		}
+		
+		String countSql="SELECT COUNT(GROUP_ID) as dataCount FROM am_group "+where;
+		
+		LOG.debug(">>>>countSql:"+countSql);
+		
+		long totalCount=0;
+		
+		List<Map<String, Object>> countResult=amGroupDao.selectBySql(countSql, paraKey, parameters);
+		if(countResult!=null&&countResult.size()>0){
+			Map<String, Object> result=countResult.get(0);
+			Object dataCount=result.get("dataCount");
+			if(dataCount!=null){
+				totalCount=Long.parseLong(dataCount.toString());
+			}
+		}
+		LOG.debug(">>>>totalCount:"+totalCount);
+		page.setTotalCount(totalCount);
+		page.update();
+		if(totalCount>0){
+			List<AmGroup> result=amGroupDao.getByWherePage(whereSql, page.getStartIndex(), page.getPageSize(), paraKey, parameters);
+			LOG.debug(">>>>result list:"+(result==null?"null":result.size()));
+			page.setData(result);
+			page.update();
+		}
+		
+		LOG.debug(">>>>page info:"+page);
+	}
+
+	@Override
+	public void getByWherePage(Pager<AmGroup> page, String whereSql,
+			String paraKey, Map<String, Object> parameters) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 
 	
 

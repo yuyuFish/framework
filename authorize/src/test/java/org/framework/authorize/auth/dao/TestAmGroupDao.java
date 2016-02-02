@@ -81,7 +81,7 @@ public class TestAmGroupDao extends AbstractJUnit4SpringContextTests {
 	
 	@Test
 	public void testGetByWherePage(){
-		List<AmGroup> result=amGroupDao.getByWherePage(null, null, null, 0L, 2L);
+		List<AmGroup> result=amGroupDao.getByWherePage("parent_group_id=#{par[0]}", 0L, 5L, "par", "ba297b14882d4e6791330d8774c152e6");
 		System.out.println(result.size());
 	}
 }

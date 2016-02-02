@@ -47,6 +47,16 @@ public interface AmRoleDao extends BaseDao {
 	 */
 	List<AmRole> getAll();
 	
+	/**
+	 * 条件查询
+	 * @param whereStr where 条件
+	 * @param paraKey where条件中所使用的参数键 如#{paraKey.[index]} 
+	 * paraKey是你想使用的键名默认为parameters，
+	 *  “index” 为parameters 索引位置
+	 * @param parameters where条件中的对应参数
+	 * @return
+	 */
+	List<AmRole> getByWhere(String whereSql,String paraKey,Object... parameters);
 	
 	/**
 	 * 条件查询
@@ -62,6 +72,19 @@ public interface AmRoleDao extends BaseDao {
 	/**
 	 * 分页条件查询
 	 * @param whereStr where 条件
+	 * @param paraKey where条件中所使用的参数键 如#{paraKey.[index]} 
+	 * paraKey是你想使用的键名默认为parameters，
+	 *  “index” 为parameters 索引位置
+	 * @param parameters where条件中的对应参数
+	 * @param startIndex 开始索引
+	 * @param size 数据条数
+	 * @return
+	 */
+	List<AmRole> getByWherePage(String whereSql,Long startIndex,Long size,String paraKey,Object... parameters);
+	
+	/**
+	 * 分页条件查询
+	 * @param whereStr where 条件
 	 * @param paraKey where条件中所使用的参数键 如#{paraKey.*} 
 	 * paraKey是你想使用的键名默认为parameters，
 	 *  “*” 为parameters map中的key
@@ -70,5 +93,5 @@ public interface AmRoleDao extends BaseDao {
 	 * @param size 数据条数
 	 * @return
 	 */
-	List<AmRole> getByWherePage(String whereSql,String paraKey,Map<String, Object> parameters,Long startIndex,Long size);
+	List<AmRole> getByWherePage(String whereSql,Long startIndex,Long size,String paraKey,Map<String, Object> parameters);
 }

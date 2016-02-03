@@ -430,7 +430,37 @@ public class AmGroupServiceImpl implements AmGroupService {
 	@Override
 	public void getByWherePage(Pager<AmGroup> page, String whereSql,
 			String paraKey, Map<String, Object> parameters) {
-		// TODO Auto-generated method stub
+		page.init();
+		String where="";
+		if(whereSql!=null&&!"".equals(whereSql.trim())){
+			where="WHERE "+whereSql.replaceAll("^\\s*(?i)where\\s+", "");
+		}
+		
+		String countSql="SELECT COUNT(GROUP_ID) as dataCount FROM am_group "+where;
+		
+		LOG.debug(">>>>countSql:"+countSql);
+		
+		long totalCount=0;
+		
+		List<Map<String, Object>> countResult=amGroupDao.selectBySql(countSql, paraKey, parameters);
+		if(countResult!=null&&countResult.size()>0){
+			Map<String, Object> result=countResult.get(0);
+			Object dataCount=result.get("dataCount");
+			if(dataCount!=null){
+				totalCount=Long.parseLong(dataCount.toString());
+			}
+		}
+		LOG.debug(">>>>totalCount:"+totalCount);
+		page.setTotalCount(totalCount);
+		page.update();
+		if(totalCount>0){
+			List<AmGroup> result=amGroupDao.getByWherePage(whereSql, page.getStartIndex(), page.getPageSize(), paraKey, parameters);
+			LOG.debug(">>>>result list:"+(result==null?"null":result.size()));
+			page.setData(result);
+			page.update();
+		}
+		
+		LOG.debug(">>>>page info:"+page);
 		
 	}
 	

@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.framework.authorize.auth.model.AmGroup;
 import org.framework.authorize.base.utils.IdUtils;
+import org.framework.authorize.base.utils.Pager;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
@@ -86,6 +87,15 @@ public class TestAmGroupService extends AbstractJUnit4SpringContextTests {
 	public void testGetLevel(){
 		int result=amGroupService.getLevel("d667181289fd4f0ebebe181095830dcb");
 		System.out.println(result);
+	}
+	
+	@Test
+	public void testGetByWherePage(){
+		Pager<AmGroup> page=new Pager<AmGroup>();
+		page.setCurPage(2);
+		page.setPageSize(5);
+		amGroupService.getByWherePage(page, "", null, "");
+		System.out.println(page);
 	}
 	
 }

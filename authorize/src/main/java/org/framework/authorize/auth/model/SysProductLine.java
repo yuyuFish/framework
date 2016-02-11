@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public class SysProductLine implements Serializable {
 	private String productId;	//产品线id	PRODUCT_ID varchar(128)
-	private String parentProductId;	//父产品线id	PARENT_PRODUCT_ID varchar(128)
+	private String parentId;	//父产品线id	PARENT_ID varchar(128)
 	private String productName;	//产品线名称	PRODUCT_NAME varchar(256)
 	private String productInfo;	//产品线描述	 PRODUCT_INFO varchar(512)
 	private String productProtocol;	//产品线使用网络协议(http https ftp...)	PRODUCT_PROTOCOL varchar(128)
@@ -30,11 +30,12 @@ public class SysProductLine implements Serializable {
 	public void setProductId(String productId) {
 		this.productId = productId;
 	}
-	public String getParentProductId() {
-		return parentProductId;
+	
+	public String getParentId() {
+		return parentId;
 	}
-	public void setParentProductId(String parentProductId) {
-		this.parentProductId = parentProductId;
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 	public String getProductName() {
 		return productName;
@@ -116,8 +117,8 @@ public class SysProductLine implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "SysProductLine [productId=" + productId + ", parentProductId="
-				+ parentProductId + ", productName=" + productName
+		return "SysProductLine [productId=" + productId + ", parentId="
+				+ parentId + ", productName=" + productName
 				+ ", productInfo=" + productInfo + ", productProtocol="
 				+ productProtocol + ", productHostName=" + productHostName
 				+ ", productIp=" + productIp + ", productPort=" + productPort

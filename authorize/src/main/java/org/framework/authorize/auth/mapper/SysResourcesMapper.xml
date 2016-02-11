@@ -6,7 +6,7 @@
 	<sql id="select_resourcesColumns">
 	    ${alias}RESOURCES_ID as resourcesId
 		,${alias}PRODUCT_ID as productId
-		,${alias}PARENT_RESOURCES_ID as parentResourcesId
+		,${alias}PARENT_ID as parentId
 		,${alias}RESOURCES_NAME as resourcesName
 		,${alias}RESOURCES_INFO as resourcesInfo
 		,${alias}RESOURCES_CODE as resourcesCode
@@ -25,7 +25,7 @@
 	<sql id="insert_resourcesColumns">
 	    RESOURCES_ID
 		,PRODUCT_ID
-		,PARENT_RESOURCES_ID
+		,PARENT_ID
 		,RESOURCES_NAME
 		,RESOURCES_INFO
 		,RESOURCES_CODE
@@ -44,7 +44,7 @@
 	<resultMap type="org.framework.authorize.auth.model.SysResources" id="sysResourcesMapping" autoMapping="true">
 	    <id property="resourcesId" column="resourcesId" />
 		<result property="productId" column="productId" />
-		<result property="parentResourcesId" column="parentResourcesId" />
+		<result property="parentId" column="parentId" />
 		<result property="resourcesName" column="resourcesName" />
 		<result property="resourcesInfo" column="resourcesInfo" />
 		<result property="resourcesCode" column="resourcesCode" />
@@ -65,7 +65,7 @@
 	    values(
 		    #{resourcesId},
 			#{productId},
-			#{parentResourcesId},
+			#{parentId},
 			#{resourcesName},
 			#{resourcesInfo},
 			#{resourcesCode},
@@ -86,7 +86,7 @@
 	    update sys_resources 
 	    set 
 	    PRODUCT_ID=#{productId}
-		,PARENT_RESOURCES_ID=#{parentResourcesId}
+		,PARENT_ID=#{parentId}
 		,RESOURCES_NAME=#{resourcesName}
 		,RESOURCES_INFO=#{resourcesInfo}
 		,RESOURCES_CODE=#{resourcesCode}

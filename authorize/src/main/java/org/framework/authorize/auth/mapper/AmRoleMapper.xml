@@ -6,7 +6,7 @@
 	<sql id="select_roleColumns">
 	    ${alias}ROLE_ID as roleId
 		,${alias}PRODUCT_ID as productId
-		,${alias}PARENT_ROLE_ID as parentRoleId
+		,${alias}PARENT_ID as parentId
 		,${alias}ROLE_NAME as roleName
 		,${alias}ROLE_INFO as roleInfo
 		,${alias}ROLE_CODE as roleCode
@@ -22,7 +22,7 @@
 	<sql id="insert_roleColumns">
 	    ROLE_ID
 		,PRODUCT_ID
-		,PARENT_ROLE_ID
+		,PARENT_ID
 		,ROLE_NAME
 		,ROLE_INFO
 		,ROLE_CODE
@@ -38,7 +38,7 @@
 	<resultMap type="org.framework.authorize.auth.model.AmRole" id="amRoleMapping" autoMapping="true">
 	    <id property="roleId" column="roleId" />
 		<result property="productId" column="productId" />
-		<result property="parentRoleId" column="parentRoleId" />
+		<result property="parentId" column="parentId" />
 		<result property="roleName" column="roleName" />
 		<result property="roleInfo" column="roleInfo" />
 		<result property="roleCode" column="roleCode" />
@@ -56,7 +56,7 @@
 	    values(
 		    #{roleId},
 			#{productId},
-			#{parentRoleId},
+			#{parentId},
 			#{roleName},
 			#{roleInfo},
 			#{roleCode},
@@ -74,7 +74,7 @@
 	    update am_role 
 	    set 
 	    PRODUCT_ID=#{productId}
-		,PARENT_ROLE_ID=#{parentRoleId}
+		,PARENT_ID=#{parentId}
 		,ROLE_NAME=#{roleName}
 		,ROLE_INFO=#{roleInfo}
 		,ROLE_CODE=#{roleCode}

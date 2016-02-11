@@ -21,7 +21,7 @@ public class TestAmGroupService extends AbstractJUnit4SpringContextTests {
 	public void testAddGroup(){
 		AmGroup group=new AmGroup();
 		group.setGroupId(IdUtils.generatorUUID());
-		group.setParentGroupId("ba297b14882d4e6791330d8774c152e6");
+		group.setParentId("ba297b14882d4e6791330d8774c152e6");
 		group.setGroupName("节点1-4");
 		group.setGroupInfo("节点1-4描述");
 		amGroupService.add(group);

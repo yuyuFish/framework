@@ -12,7 +12,7 @@ import java.util.Date;
 public class SysResources implements Serializable {
 	private String resourcesId;	//资源id	RESOURCES_ID varchar(128)
 	private String productId;	//产品线ID 	PRODUCT_ID varchar(128)
-	private String parentResourcesId;	//父资源ID	PARENT_RESOURCES_ID varchar(128)
+	private String parentId;	//父资源ID	PARENT_ID varchar(128)
 	private String resourcesName;	//资源名称	RESOURCES_NAME varchar(256)
 	private String resourcesInfo;	//资源描述	RESOURCES_INFO varchar(512)
 	private String resourcesCode;	//资源Code	RESOURCES_CODE varchar(128)
@@ -38,11 +38,12 @@ public class SysResources implements Serializable {
 	public void setProductId(String productId) {
 		this.productId = productId;
 	}
-	public String getParentResourcesId() {
-		return parentResourcesId;
+	
+	public String getParentId() {
+		return parentId;
 	}
-	public void setParentResourcesId(String parentResourcesId) {
-		this.parentResourcesId = parentResourcesId;
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 	public String getResourcesName() {
 		return resourcesName;
@@ -125,7 +126,7 @@ public class SysResources implements Serializable {
 	@Override
 	public String toString() {
 		return "SysResources [resourcesId=" + resourcesId + ", productId="
-				+ productId + ", parentResourcesId=" + parentResourcesId
+				+ productId + ", parentId=" + parentId
 				+ ", resourcesName=" + resourcesName + ", resourcesInfo="
 				+ resourcesInfo + ", resourcesCode=" + resourcesCode
 				+ ", resourcesType=" + resourcesType + ", requestUrl="

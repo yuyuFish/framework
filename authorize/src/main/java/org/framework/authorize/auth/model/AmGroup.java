@@ -11,7 +11,7 @@ import java.util.Date;
 public class AmGroup implements Serializable {
 	private String groupId;	//组ID GROUP_ID varchar(128)
 	private String productId;	//产品线ID 	PRODUCT_ID varchar(128)
-	private String parentGroupId;	//父节点ID PARENT_GROUP_ID varchar(128)
+	private String parentId;	//父节点ID PARENT_ID varchar(128)
 	private String groupName;	//组名	  GROUP_NAME varchar(256)
 	private String groupInfo;	//组描述	GROUP_INFO varchar(512)
 	private String groupCode;  //组CODE	GROUP_CODE varchar(1024),
@@ -28,11 +28,12 @@ public class AmGroup implements Serializable {
 	public void setGroupId(String groupId) {
 		this.groupId = groupId;
 	}
-	public String getParentGroupId() {
-		return parentGroupId;
+	
+	public String getParentId() {
+		return parentId;
 	}
-	public void setParentGroupId(String parentGroupId) {
-		this.parentGroupId = parentGroupId;
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 	public String getGroupName() {
 		return groupName;
@@ -103,7 +104,7 @@ public class AmGroup implements Serializable {
 	@Override
 	public String toString() {
 		return "AmGroup [groupId=" + groupId + ", productId=" + productId
-				+ ", parentGroupId=" + parentGroupId + ", groupName="
+				+ ", parentId=" + parentId + ", groupName="
 				+ groupName + ", groupInfo=" + groupInfo + ", groupCode="
 				+ groupCode + ", isInherit=" + isInherit + ", leftValue="
 				+ leftValue + ", rightValue=" + rightValue + ", createTime="

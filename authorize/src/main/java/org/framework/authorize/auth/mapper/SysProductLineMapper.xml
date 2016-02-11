@@ -5,7 +5,7 @@
 	
 	<sql id="select_productLineColumns">
 	    ${alias}PRODUCT_ID as productId
-		,${alias}PARENT_PRODUCT_ID as parentProductId
+		,${alias}PARENT_ID as parentId
 		,${alias}PRODUCT_NAME as productName
 		,${alias}PRODUCT_INFO as productInfo
 		,${alias}PRODUCT_PROTOCOL as productProtocol
@@ -23,7 +23,7 @@
 	
 	<sql id="insert_productLineColumns">
 	    PRODUCT_ID
-		,PARENT_PRODUCT_ID
+		,PARENT_ID
 		,PRODUCT_NAME
 		,PRODUCT_INFO
 		,PRODUCT_PROTOCOL
@@ -41,7 +41,7 @@
 	
 	<resultMap type="org.framework.authorize.auth.model.SysProductLine" id="sysProductLineMapping" autoMapping="true">
 	    <id property="productId" column="productId" />
-		<result property="parentProductId" column="parentProductId" />
+		<result property="parentId" column="parentId" />
 		<result property="productName" column="productName" />
 		<result property="productInfo" column="productInfo" />
 		<result property="productProtocol" column="productProtocol" />
@@ -61,7 +61,7 @@
 	    insert into sys_product_line(<include refid="insert_productLineColumns"></include>)
 	    values(
 		    #{productId},
-			#{parentProductId},
+			#{parentId},
 			#{productName},
 			#{productInfo},
 			#{productProtocol},
@@ -81,7 +81,7 @@
 	<update id="update" parameterType="org.framework.authorize.auth.model.AmRole">
 	    update sys_product_line 
 	    set 
-	    ,PARENT_PRODUCT_ID=#{parentProductId}
+	    ,PARENT_ID=#{parentId}
 		,PRODUCT_NAME=#{productName}
 		,PRODUCT_INFO=#{productInfo}
 		,PRODUCT_PROTOCOL=#{productProtocol}

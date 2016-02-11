@@ -11,7 +11,7 @@ import java.util.Date;
 public class AmRole implements Serializable {
 	private String roleId;	//角色id	ROLE_ID varchar(128) not null,
 	private String productId;	//产品线ID 	PRODUCT_ID varchar(128)
-	private String parentRoleId;	//父角色id PARENT_ROLE_ID varchar(128)
+	private String parentId;	//父角色id PARENT_ID varchar(128)
 	private String roleName;	//角色名	ROLE_NAME varchar(256),
 	private String roleInfo;	//角色描述	ROLE_INFO varchar(512),
 	private String roleCode;	//角色CODE ROLE_CODE varchar(1024),
@@ -34,11 +34,12 @@ public class AmRole implements Serializable {
 	public void setProductId(String productId) {
 		this.productId = productId;
 	}
-	public String getParentRoleId() {
-		return parentRoleId;
+	
+	public String getParentId() {
+		return parentId;
 	}
-	public void setParentRoleId(String parentRoleId) {
-		this.parentRoleId = parentRoleId;
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 	public String getRoleName() {
 		return roleName;
@@ -103,7 +104,7 @@ public class AmRole implements Serializable {
 	@Override
 	public String toString() {
 		return "AmRole [roleId=" + roleId + ", productId=" + productId
-				+ ", parentRoleId=" + parentRoleId + ", roleName=" + roleName
+				+ ", parentId=" + parentId + ", roleName=" + roleName
 				+ ", roleInfo=" + roleInfo + ", roleCode=" + roleCode
 				+ ", isInherit=" + isInherit + ", leftValue=" + leftValue
 				+ ", rightValue=" + rightValue + ", createTime=" + createTime

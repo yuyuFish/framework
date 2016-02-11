@@ -6,7 +6,7 @@
 	<sql id="select_groupColumns">
 	    ${alias}GROUP_ID as groupId
 	    ,${alias}PRODUCT_ID as productId
-	    ,${alias}PARENT_GROUP_ID as parentGroupId
+	    ,${alias}PARENT_ID as parentId
 	    ,${alias}GROUP_NAME as groupName
 	    ,${alias}GROUP_INFO as groupInfo
 	    ,${alias}GROUP_CODE as groupCode
@@ -22,7 +22,7 @@
 	<sql id="insert_groupColumns">
 	    GROUP_ID
 	    ,PRODUCT_ID
-	    ,PARENT_GROUP_ID
+	    ,PARENT_ID
 	    ,GROUP_NAME
 	    ,GROUP_INFO
 	    ,GROUP_CODE
@@ -38,7 +38,7 @@
 	<resultMap type="org.framework.authorize.auth.model.AmGroup" id="amGroupMapping" autoMapping="true">
 	    <id property="groupId" column="groupId"/>
 	    <result property="productId" column="productId"/>
-	    <result property="parentGroupId" column="parentGroupId"/>
+	    <result property="parentId" column="parentId"/>
 	    <result property="groupName" column="groupName"/>
 	    <result property="groupInfo" column="groupInfo"/>
 	    <result property="groupCode" column="groupCode"/>
@@ -53,7 +53,7 @@
 	
 	<insert id="save" parameterType="org.framework.authorize.auth.model.AmGroup">
 	    insert into am_group(<include refid="insert_groupColumns"></include>)
-	    values(#{groupId},#{productId},#{parentGroupId},#{groupName},#{groupInfo}
+	    values(#{groupId},#{productId},#{parentId},#{groupName},#{groupInfo}
 	    ,#{groupCode},#{isInherit},#{leftValue},#{rightValue},#{createTime},#{editTime}
 	    ,#{deleteTime},#{dataState})
 	</insert>
@@ -62,7 +62,7 @@
 	    update am_group 
 	    set 
 	    PRODUCT_ID=#{productId},
-	    PARENT_GROUP_ID=#{parentGroupId},
+	    PARENT_ID=#{parentId},
 	    GROUP_NAME=#{groupName},
 	    GROUP_INFO=#{groupInfo},
 	    GROUP_CODE=#{groupCode},

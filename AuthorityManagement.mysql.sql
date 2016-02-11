@@ -29,7 +29,7 @@ create table AM_GROUP
 (
    GROUP_ID             varchar(128) not null,
    PRODUCT_ID           varchar(128),
-   PARENT_GROUP_ID      varchar(128),
+   PARENT_ID      varchar(128),
    GROUP_NAME           varchar(256),
    GROUP_INFO           varchar(512),
    GROUP_CODE           varchar(1024),
@@ -120,7 +120,7 @@ create table AM_ROLE
 (
    ROLE_ID              varchar(128) not null,
    PRODUCT_ID           varchar(128),
-   PARENT_ROLE_ID       varchar(128),
+   PARENT_ID       varchar(128),
    ROLE_NAME            varchar(256),
    ROLE_INFO            varchar(512),
    ROLE_CODE            varchar(1024),
@@ -141,7 +141,7 @@ create table SYS_MODULE
 (
    MODULE_ID            varchar(128) not null,
    PRODUCT_ID           varchar(128),
-   PARENT_MODULE_ID     varchar(128),
+   PARENT_ID     varchar(128),
    MODULE_NAME          varchar(256),
    MODULE_INFO          varchar(512),
    MODULE_CODE          varchar(128),
@@ -161,7 +161,7 @@ create table SYS_MODULE
 create table SYS_PRODUCT_LINE
 (
    PRODUCT_ID           varchar(128) not null,
-   PARENT_PRODUCT_ID    varchar(128),
+   PARENT_ID    varchar(128),
    PRODUCT_NAME         varchar(256),
    PRODUCT_INFO         varchar(512),
    PRODUCT_PROTOCOL     varchar(128),
@@ -185,7 +185,7 @@ create table SYS_RESOURCES
 (
    RESOURCES_ID         varchar(128) not null,
    PRODUCT_ID           varchar(128),
-   PARENT_RESOURCES_ID  varchar(128),
+   PARENT_ID  varchar(128),
    RESOURCES_NAME       varchar(256),
    RESOURCES_INFO       varchar(512),
    RESOURCES_CODE       varchar(128),

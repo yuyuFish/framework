@@ -22,7 +22,7 @@ public class TestAmGroupDao extends AbstractJUnit4SpringContextTests {
 		AmGroup amGroup=new AmGroup();
 		amGroup.setGroupId(IdUtils.generatorUUID());
 		amGroup.setProductId(IdUtils.generatorUUID());
-		amGroup.setParentGroupId(null);
+		amGroup.setParentId(null);
 		amGroup.setGroupName("测试组");
 		amGroup.setGroupInfo("测试组描述");
 		amGroup.setGroupCode("code");
@@ -43,7 +43,7 @@ public class TestAmGroupDao extends AbstractJUnit4SpringContextTests {
 		AmGroup amGroup=new AmGroup();
 		amGroup.setGroupId("5a6e33e98c1b4ebfa8c4cf5d71fe80e8");
 		amGroup.setProductId(IdUtils.generatorUUID());
-		amGroup.setParentGroupId(null);
+		amGroup.setParentId(null);
 		amGroup.setGroupName("测试组");
 		amGroup.setGroupInfo("测试组描述");
 		amGroup.setGroupCode("code");
@@ -75,13 +75,13 @@ public class TestAmGroupDao extends AbstractJUnit4SpringContextTests {
 	public void testGetByWhere(){
 		Map<String, Object> map=new HashMap<String, Object>();
 		map.put("groupId", null);
-		List<AmGroup> result=amGroupDao.getByWhere("where PARENT_GROUP_ID is #{pa.groupId}", "pa", map);
+		List<AmGroup> result=amGroupDao.getByWhere("where PARENT_ID is #{pa.groupId}", "pa", map);
 		System.out.println("$$$$:"+result.size());
 	}
 	
 	@Test
 	public void testGetByWherePage(){
-		List<AmGroup> result=amGroupDao.getByWherePage("parent_group_id=#{par[0]}", 0L, 5L, "par", "ba297b14882d4e6791330d8774c152e6");
+		List<AmGroup> result=amGroupDao.getByWherePage("PARENT_ID=#{par[0]}", 0L, 5L, "par", "ba297b14882d4e6791330d8774c152e6");
 		System.out.println(result.size());
 	}
 }

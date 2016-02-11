@@ -22,7 +22,7 @@ public class TestBaseDao extends AbstractJUnit4SpringContextTests {
 	
 	@Test
 	public void testInsertBySql(){
-		String sql="insert into sys_product_line(PRODUCT_ID,PARENT_PRODUCT_ID,PRODUCT_NAME,PRODUCT_INFO"
+		String sql="insert into sys_product_line(PRODUCT_ID,PARENT_ID,PRODUCT_NAME,PRODUCT_INFO"
 				+ ",PRODUCT_PROTOCOL,PRODUCT_HOSTNAME,PRODUCT_IP,PRODUCT_PORT,PRODUCT_CODE,LEFT_VALUE"
 				+ ",RIGHT_VALUE,CREATE_TIME,EDIT_TIME,DELETE_TIME,DATA_STATE) "
 				+ "values(#{parameters[0]},#{parameters[1]},#{parameters[2]},#{parameters[3]},#{parameters[4]}"

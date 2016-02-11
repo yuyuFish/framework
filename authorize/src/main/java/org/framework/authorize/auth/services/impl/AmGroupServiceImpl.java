@@ -34,10 +34,10 @@ public class AmGroupServiceImpl implements AmGroupService {
 		Long leftValue=1L;
 		Long rightValue=2L;
 		
-		if(amGroup.getParentGroupId()==null){
+		if(amGroup.getParentId()==null){
 			LOG.debug(">>>>create root node>>>>");
 			String productIdWhere=amGroup.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par.productId}";
-			String sql=productIdWhere+" AND PARENT_GROUP_ID IS NULL ORDER BY RIGHT_VALUE DESC LIMIT 0,1";
+			String sql=productIdWhere+" AND PARENT_ID IS NULL ORDER BY RIGHT_VALUE DESC LIMIT 0,1";
 			Map<String, Object> parameters=new HashMap<String, Object>();
 			parameters.put("productId", amGroup.getProductId());
 			List<AmGroup> groups=amGroupDao.getByWhere(sql, "par",parameters );
@@ -48,8 +48,8 @@ public class AmGroupServiceImpl implements AmGroupService {
 			}
 		}else{
 			LOG.debug(">>>>create subnode>>>>");
-			AmGroup parentGroup=amGroupDao.getById(amGroup.getParentGroupId());
-			if(parentGroup==null) throw new RuntimeException(">>>>["+amGroup.getParentGroupId()+"] node non-existent");
+			AmGroup parentGroup=amGroupDao.getById(amGroup.getParentId());
+			if(parentGroup==null) throw new RuntimeException(">>>>["+amGroup.getParentId()+"] node non-existent");
 			leftValue=parentGroup.getRightValue();
 			rightValue=leftValue+1;
 			
@@ -81,7 +81,7 @@ public class AmGroupServiceImpl implements AmGroupService {
 		dbGroup.setGroupCode(amGroup.getGroupCode());
 		dbGroup.setIsInherit(amGroup.getIsInherit());
 		dbGroup.setEditTime(new Date());
-		int result=amGroupDao.update(amGroup);
+		int result=amGroupDao.update(dbGroup);
 		LOG.debug(">>>>Update Result Value:"+result);
 	}
 
@@ -128,6 +128,7 @@ public class AmGroupServiceImpl implements AmGroupService {
 		AmGroup dbTargetGroup=null;
 		if(parentId!=null&&!"".equals(parentId.trim())){
 			dbParentGroup=amGroupDao.getById(parentId);
+			if(dbParentGroup==null) throw new RuntimeException(">>>>["+parentId+"] Parent node non-existent");
 			if(dbParentGroup.getLeftValue()>=dbSourceGroup.getLeftValue()
 					&&dbParentGroup.getRightValue()<=dbSourceGroup.getRightValue()){
 				throw new RuntimeException(">>>>parentId Can't be a child node");
@@ -137,6 +138,7 @@ public class AmGroupServiceImpl implements AmGroupService {
 		}
 		if(targetNodeId!=null&&!"".equals(targetNodeId.trim())){
 			dbTargetGroup=amGroupDao.getById(targetNodeId);
+			if(dbTargetGroup==null) throw new RuntimeException(">>>>["+targetNodeId+"] Target node non-existent");
 			if(dbTargetGroup.getLeftValue()>=dbSourceGroup.getLeftValue()
 					&&dbTargetGroup.getRightValue()<=dbSourceGroup.getRightValue()){
 				throw new RuntimeException(">>>>targetNodeId Can't be a child node");
@@ -146,8 +148,8 @@ public class AmGroupServiceImpl implements AmGroupService {
 		}
 		
 		if(dbTargetGroup!=null
-				&&(dbTargetGroup.getParentGroupId()==null&&parentId!=null
-				||dbTargetGroup.getParentGroupId()!=null&&!dbTargetGroup.getParentGroupId().equals(parentId))){
+				&&(dbTargetGroup.getParentId()==null&&parentId!=null
+				||dbTargetGroup.getParentId()!=null&&!dbTargetGroup.getParentId().equals(parentId))){
 			throw new RuntimeException(">>>>targetNodeId parentId Don't match");
 		}
 		
@@ -167,7 +169,7 @@ public class AmGroupServiceImpl implements AmGroupService {
 		Long startLeftValue=1L;
 		if(dbParentGroup==null){
 			if(dbTargetGroup==null){
-				sql=productIdWhere+" AND PARENT_GROUP_ID IS NULL ORDER BY RIGHT_VALUE DESC LIMIT 0,1";
+				sql=productIdWhere+" AND PARENT_ID IS NULL ORDER BY RIGHT_VALUE DESC LIMIT 0,1";
 				
 				List<AmGroup> groups=amGroupDao.getByWhere(sql, "par",par );
 				if(groups!=null&&groups.size()>0){
@@ -179,15 +181,7 @@ public class AmGroupServiceImpl implements AmGroupService {
 			}
 		}else{
 			if(dbTargetGroup==null){
-				sql=productIdWhere+" AND PARENT_GROUP_ID=#{par.parentGroupId} ORDER BY RIGHT_VALUE DESC LIMIT 0,1";
-				par.put("parentGroupId", dbParentGroup.getGroupId());
-				List<AmGroup> groups=amGroupDao.getByWhere(sql, "par",par );
-				if(groups!=null&&groups.size()>0){
-					AmGroup maxGroup=groups.get(0);
-					startLeftValue=maxGroup.getRightValue()+1;
-				}else{
-					startLeftValue=dbParentGroup.getLeftValue()+1;
-				}
+				startLeftValue=dbParentGroup.getRightValue();
 			}else{
 				startLeftValue=dbTargetGroup.getLeftValue();
 			}
@@ -223,7 +217,7 @@ public class AmGroupServiceImpl implements AmGroupService {
 		
 		dbSourceGroup=amGroupDao.getById(sourceNodeId);
 		
-		dbSourceGroup.setParentGroupId(parentId);
+		dbSourceGroup.setParentId(parentId);
 		
 		amGroupDao.update(dbSourceGroup);
 		
@@ -250,10 +244,10 @@ public class AmGroupServiceImpl implements AmGroupService {
 		if(dbGroup==null) return null;
 		
 		String productIdWhere=dbGroup.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par.productId}";
-		String sql=productIdWhere+" and PARENT_GROUP_ID=#{par.parentGroupId} and DATA_STATE=#{par.dataState} order by LEFT_VALUE";
+		String sql=productIdWhere+" and PARENT_ID=#{par.parentId} and DATA_STATE=#{par.dataState} order by LEFT_VALUE";
 		Map<String, Object> par=new HashMap<String, Object>();
 		par.put("productId", dbGroup.getProductId());
-		par.put("parentGroupId", dbGroup.getGroupId());
+		par.put("parentId", dbGroup.getGroupId());
 		par.put("dataState", ConstData.DATA_NORMAL);
 		
 		List<AmGroup> result=amGroupDao.getByWhere(sql, "par", par);
@@ -269,10 +263,10 @@ public class AmGroupServiceImpl implements AmGroupService {
 		
 		String productIdWhere=dbGroup.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par.productId}";
 		
-		String sql="SELECT COUNT(GROUP_ID) AS cou FROM am_group WHERE  DATA_STATE=#{par.dataState} AND PARENT_GROUP_ID=#{par.parentGroupId} AND "+productIdWhere;
+		String sql="SELECT COUNT(GROUP_ID) AS cou FROM am_group WHERE  DATA_STATE=#{par.dataState} AND PARENT_ID=#{par.parentId} AND "+productIdWhere;
 		Map<String, Object> par=new HashMap<String, Object>();
 		par.put("productId", dbGroup.getProductId());
-		par.put("parentGroupId", dbGroup.getGroupId());
+		par.put("parentId", dbGroup.getGroupId());
 		par.put("dataState", ConstData.DATA_NORMAL);
 		List<Map<String, Object>> list=amGroupDao.selectBySql(sql, "par", par);
 		if(list!=null&&list.size()>0){

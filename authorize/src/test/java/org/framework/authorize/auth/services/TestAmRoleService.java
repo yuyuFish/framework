@@ -28,4 +28,10 @@ public class TestAmRoleService extends AbstractJUnit4SpringContextTests {
 	public void testChangePoint(){
 		amRoleService.changePoint("22f9f94ab17e494d93df9a37c1b7a784", "3e9f6098b36c46f48334a073d173d44a", "");
 	}
+	
+	@Test
+	public void testGetLevel(){
+		int lev=amRoleService.getLevel("0643d676261f4b0fab7747fcd3aa8979");
+		System.out.println(lev);
+	}
 }

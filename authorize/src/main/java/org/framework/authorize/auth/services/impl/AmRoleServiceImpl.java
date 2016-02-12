@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.framework.authorize.auth.dao.AmRoleDao;
-import org.framework.authorize.auth.model.AmGroup;
 import org.framework.authorize.auth.model.AmRole;
 import org.framework.authorize.auth.services.AmRoleService;
 import org.framework.authorize.base.model.ConstData;
@@ -277,47 +276,164 @@ public class AmRoleServiceImpl implements AmRoleService {
 	}
 	@Override
 	public void deleteLogic(String roleId) {
-		// TODO Auto-generated method stub
+		AmRole dbRole=amRoleDao.getById(roleId);
+		if(dbRole==null) return;
 		
+		String productIdWhere=dbRole.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par[4]}";
+		
+		String sql="update am_role set DATA_STATE=#{par[0]},DELETE_TIME=#{par[1]} "
+				+ "where LEFT_VALUE>=#{par[2]} and RIGHT_VALUE<=#{par[3]} and "+productIdWhere;
+		amRoleDao.updateBySql(sql, "par", ConstData.DATA_DELETE,new Date(),dbRole.getLeftValue(),dbRole.getRightValue(),dbRole.getProductId());
 	}
 	@Override
 	public void deleteLogicRestore(String roleId) {
-		// TODO Auto-generated method stub
+		AmRole dbRole=amRoleDao.getById(roleId);
+		if(dbRole==null) return;
+		
+		String productIdWhere=dbRole.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par[4]}";
+		
+		String sql="update am_role set DATA_STATE=#{par[0]},DELETE_TIME=#{par[1]} "
+				+ "where LEFT_VALUE>=#{par[2]} and RIGHT_VALUE<=#{par[3]} and "+productIdWhere;
+		amRoleDao.updateBySql(sql, "par", ConstData.DATA_NORMAL,null,dbRole.getLeftValue(),dbRole.getRightValue(),dbRole.getProductId());
 		
 	}
 	@Override
 	public void deletePhysical(String roleId) {
-		// TODO Auto-generated method stub
+		AmRole dbRole=amRoleDao.getById(roleId);
+		if(dbRole==null) return;
+		Long offset=dbRole.getRightValue()-dbRole.getLeftValue()+1;
+		LOG.debug(">>>>delete offset:"+offset);
+		
+		String productIdWhere=dbRole.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par[2]}";
+		
+		String sql="delete from am_role where LEFT_VALUE>=#{par[0]} and RIGHT_VALUE<=#{par[1]} and "+productIdWhere;
+		int result=amRoleDao.deleteBySql(sql, "par", dbRole.getLeftValue(),dbRole.getRightValue(),dbRole.getProductId());
+		LOG.debug(">>>>delete node count:"+result);
+		sql="update am_role set LEFT_VALUE=LEFT_VALUE-#{par[0]} where LEFT_VALUE>#{par[1]} and "+productIdWhere;
+		amRoleDao.updateBySql(sql, "par",offset,dbRole.getRightValue(),dbRole.getProductId());
+		sql="update am_role set RIGHT_VALUE=RIGHT_VALUE-#{par[0]} where RIGHT_VALUE>#{par[1]} and "+productIdWhere;
+		amRoleDao.updateBySql(sql, "par",offset,dbRole.getRightValue(),dbRole.getProductId());
 		
 	}
 	@Override
 	public List<AmRole> getDirectChild(String roleId) {
-		// TODO Auto-generated method stub
-		return null;
+		AmRole dbRole=amRoleDao.getById(roleId);
+		if(dbRole==null) return null;
+		
+		String productIdWhere=dbRole.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par.productId}";
+		String sql=productIdWhere+" and PARENT_ID=#{par.parentId} and DATA_STATE=#{par.dataState} order by LEFT_VALUE";
+		Map<String, Object> par=new HashMap<String, Object>();
+		par.put("productId", dbRole.getProductId());
+		par.put("parentId", dbRole.getRoleId());
+		par.put("dataState", ConstData.DATA_NORMAL);
+		
+		List<AmRole> result=amRoleDao.getByWhere(sql, "par", par);
+		
+		return result;
 	}
 	@Override
 	public int getDirectChildCount(String roleId) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result=0;
+		AmRole dbRole=amRoleDao.getById(roleId);
+		if(dbRole==null) return result;
+		
+		String productIdWhere=dbRole.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par.productId}";
+		
+		String sql="SELECT COUNT(ROLE_ID) AS cou FROM am_role WHERE  DATA_STATE=#{par.dataState} AND PARENT_ID=#{par.parentId} AND "+productIdWhere;
+		Map<String, Object> par=new HashMap<String, Object>();
+		par.put("productId", dbRole.getProductId());
+		par.put("parentId", dbRole.getRoleId());
+		par.put("dataState", ConstData.DATA_NORMAL);
+		List<Map<String, Object>> list=amRoleDao.selectBySql(sql, "par", par);
+		if(list!=null&&list.size()>0){
+			Map<String, Object> record=list.get(0);
+			Object count=record.get("cou");
+			if(count!=null){
+				result=Integer.parseInt(count.toString());
+			}
+			
+		}
+		LOG.debug(">>>>result:"+result);
+		return result;
 	}
 	@Override
 	public List<AmRole> getAllChild(String roleId) {
-		// TODO Auto-generated method stub
-		return null;
+		AmRole dbRole=amRoleDao.getById(roleId);
+		if(dbRole==null) return null;
+		String productIdWhere=dbRole.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par.productId}";
+		String sql=productIdWhere+" and LEFT_VALUE>#{par.leftValue} and RIGHT_VALUE<#{par.rightValue} and DATA_STATE=#{par.dataState} order by LEFT_VALUE";
+		Map<String, Object> par=new HashMap<String, Object>();
+		par.put("productId", dbRole.getProductId());
+		par.put("leftValue", dbRole.getLeftValue());
+		par.put("rightValue", dbRole.getRightValue());
+		par.put("dataState", ConstData.DATA_NORMAL);
+		List<AmRole> result=amRoleDao.getByWhere(sql, "par", par);
+		return result;
 	}
 	@Override
 	public int getAllChildCount(String roleId) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result=0;
+		AmRole dbRole=amRoleDao.getById(roleId);
+		if(dbRole==null) return result;
+		
+		String productIdWhere=dbRole.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par.productId}";
+		
+		String sql="SELECT COUNT(ROLE_ID) AS cou FROM am_role WHERE  DATA_STATE=#{par.dataState} "
+				+ " AND LEFT_VALUE>#{par.leftValue} AND RIGHT_VALUE<#{par.rightValue} AND "+productIdWhere;
+		Map<String, Object> par=new HashMap<String, Object>();
+		par.put("productId", dbRole.getProductId());
+		par.put("leftValue", dbRole.getLeftValue());
+		par.put("rightValue", dbRole.getRightValue());
+		par.put("dataState", ConstData.DATA_NORMAL);
+		List<Map<String, Object>> list=amRoleDao.selectBySql(sql, "par", par);
+		if(list!=null&&list.size()>0){
+			Map<String, Object> record=list.get(0);
+			Object count=record.get("cou");
+			if(count!=null){
+				result=Integer.parseInt(count.toString());
+			}
+			
+		}
+		LOG.debug(">>>>result:"+result);
+		return result;
 	}
 	@Override
 	public List<AmRole> getPath(String roleId) {
-		// TODO Auto-generated method stub
-		return null;
+		AmRole dbRole=amRoleDao.getById(roleId);
+		if(dbRole==null) return null;
+		String productIdWhere=dbRole.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par.productId}";
+		String sql=productIdWhere+" and LEFT_VALUE<=#{par.leftValue} and RIGHT_VALUE>=#{par.rightValue} order by LEFT_VALUE";
+		Map<String, Object> par=new HashMap<String, Object>();
+		par.put("productId", dbRole.getProductId());
+		par.put("leftValue", dbRole.getLeftValue());
+		par.put("rightValue", dbRole.getRightValue());
+		List<AmRole> result=amRoleDao.getByWhere(sql, "par", par);
+		return result;
 	}
 	@Override
 	public int getLevel(String roleId) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result=-1;
+		AmRole dbRole=amRoleDao.getById(roleId);
+		if(dbRole==null) return result;
+		
+		String productIdWhere=dbRole.getProductId()==null?"PRODUCT_ID IS NULL":"PRODUCT_ID=#{par.productId}";
+		
+		String sql="SELECT COUNT(ROLE_ID) AS cou FROM am_role WHERE "
+				+ "LEFT_VALUE<=#{par.leftValue} AND RIGHT_VALUE>=#{par.rightValue} AND "+productIdWhere;
+		Map<String, Object> par=new HashMap<String, Object>();
+		par.put("productId", dbRole.getProductId());
+		par.put("leftValue", dbRole.getLeftValue());
+		par.put("rightValue", dbRole.getRightValue());
+		List<Map<String, Object>> list=amRoleDao.selectBySql(sql, "par", par);
+		if(list!=null&&list.size()>0){
+			Map<String, Object> record=list.get(0);
+			Object count=record.get("cou");
+			if(count!=null){
+				result=Integer.parseInt(count.toString());
+			}
+			
+		}
+		LOG.debug(">>>>result:"+result);
+		return result;
 	}
 }

@@ -78,10 +78,9 @@
 	    )
 	</insert>
 	
-	<update id="update" parameterType="org.framework.authorize.auth.model.AmRole">
+	<update id="update" parameterType="org.framework.authorize.auth.model.SysProductLine">
 	    update sys_product_line 
-	    set 
-	    ,PARENT_ID=#{parentId}
+	    set PARENT_ID=#{parentId}
 		,PRODUCT_NAME=#{productName}
 		,PRODUCT_INFO=#{productInfo}
 		,PRODUCT_PROTOCOL=#{productProtocol}

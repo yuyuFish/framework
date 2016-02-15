@@ -87,12 +87,11 @@
 	<!-- Shiro Filter -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/app/auth" />
-		<property name="successUrl" value="/app/act_toMenu.action " />
+		<property name="loginUrl" value="/auth/authen/login" />
+		<property name="successUrl" value="/auth/authen/index" />
 		<property name="unauthorizedUrl" value="/public/401.jsp"></property>
 		<property name="filterChainDefinitions">
 			<value>
-				
 		 	</value>
 		</property>
 		<property name="filters">

@@ -138,7 +138,7 @@ public class AuthenController {
 			return "redirect:"+getSuccessUrl();
 		}
 		
-		model.addAttribute("captchaEnable", isCaptchaEnable());
+		model.addAttribute("captchaEnable", checkCaptchaEnable());
 		
 		return getLoginUrl();
 	}
@@ -170,6 +170,8 @@ public class AuthenController {
 			out=response.getOutputStream();
 			String value=EncoderHelper.getChallangeAndWriteImage(configurableCaptchaService, "png", out);
 			System.out.println(value);
+			System.out.println(request.getSession());
+			System.out.println(SecurityUtils.getSubject().getSession());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -203,6 +205,12 @@ public class AuthenController {
 			errors.rejectValue(getUsernameParam(), "base.authen.login.username.err.length", new Object[]{6,20}, "用户名长度必须为{0}-{1}");
 			return;
 		}
+	}
+	
+	private boolean checkCaptchaEnable(){
+		boolean result=true;
+		//插入判断什么时候需要开启验证码，如密码错误尝试到一定次数，账号异常等
+		return result;
 	}
 	
 	private class UserModel implements Serializable{

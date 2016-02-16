@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -145,7 +146,7 @@ public class AuthenController {
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public String login(HttpServletRequest request,HttpServletResponse response,Model model,@ModelAttribute("user")UserModel user,Errors errors){
-		validation(user, errors);
+		validation(request,user, errors);
 		if(errors.hasErrors()){
 			return getLoginUrl();
 		}
@@ -169,9 +170,7 @@ public class AuthenController {
         try {
 			out=response.getOutputStream();
 			String value=EncoderHelper.getChallangeAndWriteImage(configurableCaptchaService, "png", out);
-			System.out.println(value);
-			System.out.println(request.getSession());
-			System.out.println(SecurityUtils.getSubject().getSession());
+			request.getSession().setAttribute(this.captchaKey, value);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -188,13 +187,24 @@ public class AuthenController {
 		}
 	}
 	
-	private void validation(UserModel user,Errors errors){
+	public String getCaptchaValue(HttpSession session){
+		Object captcha=session.getAttribute(this.captchaKey);
+		session.removeAttribute(this.captchaKey);
+		if(captcha!=null&&captcha instanceof String){
+			return (String) captcha;
+		}else{
+			return null;
+		}
+	}
+	
+	private void validation(HttpServletRequest request,UserModel user,Errors errors){
 		String username=user.getUsername();
 		String password=user.getPassword();
 		String captcha=user.getCaptcha();
 		
-		if(isCaptchaEnable()){
-			
+		if(checkCaptchaEnable()&&(captcha==null||!captcha.equals(request.getSession()))){
+			errors.rejectValue(getCaptchaParam(), "base.authen.login.captcha.err.match", "验证码不匹配");
+			return;
 		}
 		
 		if(username==null||"".equals(username.trim())){
@@ -203,6 +213,15 @@ public class AuthenController {
 		}
 		if(username.trim().length()<6||username.trim().length()>20){
 			errors.rejectValue(getUsernameParam(), "base.authen.login.username.err.length", new Object[]{6,20}, "用户名长度必须为{0}-{1}");
+			return;
+		}
+		
+		if(password==null||"".equals(password.trim())){
+			errors.rejectValue(getPasswordParam(), "base.authen.login.password.err.null", "密码不能为空");
+			return;
+		}
+		if(password.trim().length()<6||password.trim().length()>20){
+			errors.rejectValue(getPasswordParam(), "base.authen.login.password.err.length", new Object[]{6,20}, "密码长度必须为{0}-{1}");
 			return;
 		}
 	}

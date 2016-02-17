@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -23,17 +24,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
     <center>
-    <input type="search" />
     	<div>
-    		<form:form method="POST" commandName="user" >
-    			<form:input path="username" /> <form:errors path="username"></form:errors>
-    			<form:password path="password" /> <form:errors path="password"></form:errors>
-    			<input type="submit" value="login"/>
-    			<input name="language" value="en_US" type="hidden" /><br/>
+    		<form action="" method="post">
+    			<spring:message code="base.authen.web.login.label.username"></spring:message>
+    			<input type="text" name="username" value="${param.username}" /><br/>
+    			<spring:message code="base.authen.web.login.label.password"></spring:message>
+    			<input type="password" name="password"  /><br/>
+    			<spring:message code="base.authen.web.login.label.captcha"></spring:message>
+    			<input type="text" name="captcha" />
     			<img src="auth/authen/captcha" id="captcha"/>
-    			<div style="color: red;"><form:errors path="*"></form:errors></div>
-    			
-    		</form:form>
+    			<input type="submit" value="login"/><br/>
+    			${requestScope.errorMessage }
+    		</form>
+    		<a href="auth/authen/login?language=zh_CN">中文</a><br/>
+    		<a href="auth/authen/login?language=en_US">英文</a>
+    		
     	</div>
     </center>
     <script type="text/javascript" src="static/js/jquery-1.11.3.min.js"></script>

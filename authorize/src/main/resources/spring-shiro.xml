@@ -12,9 +12,9 @@
 	
 	<!-- 凭证匹配 -->
 	<bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
-		<property name="hashAlgorithmName" value="sha1"></property>
+		<property name="hashAlgorithmName" value="md5"></property>
 		<property name="hashIterations" value="1"></property>
-		<property name="storedCredentialsHexEncoded" value="false"></property>
+		<property name="storedCredentialsHexEncoded" value="true"></property>
 	</bean>
 	
 	<!-- 采用java uuid  生成 sessionId -->
@@ -69,11 +69,11 @@
 	</bean>
 	
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-		<!-- <property name="realms">
+		<property name="realms">
 			<list>
-				<ref bean="appRealm"/>
+				<ref bean="authRealm"/>
 			</list>
-		</property> -->
+		</property>
 		<property name="cacheManager" ref="cacheManager"></property>
 		<property name="rememberMeManager" ref="rememberMeManager"></property>
 	</bean>
@@ -102,14 +102,14 @@
 	</bean>
 	
 	<!-- 自定义Realm -->
-	<!-- <bean id="appRealm" class="com.teamwings.base.shiro.realm.AppRealm">
-		<property name="credentialsMatcher" ref="hashedCredentialsMatcher"></property>
-		<property name="cachingEnabled" value="true"></property>
+	<bean id="authRealm" class="org.framework.authorize.auth.realm.AuthRealm">
+		<property name="credentialsMatcher" ref="credentialsMatcher"></property>
+		<!-- <property name="cachingEnabled" value="true"></property>
 		<property name="authenticationCachingEnabled" value="true"></property>
 		<property name="authenticationCacheName" value="authenticationCache"></property>
 		<property name="authorizationCachingEnabled" value="true"></property>
-		<property name="authorizationCacheName" value="authorizationCache"></property>
-	</bean> -->
+		<property name="authorizationCacheName" value="authorizationCache"></property> -->
+	</bean>
 	
 	<!-- 自定义拦截器 -->
 	<!-- <bean id="dingAuthFilter" class="com.teamwings.base.shiro.filter.DingAuthFilter">

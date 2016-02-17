@@ -2,8 +2,8 @@ package org.framework.authorize.auth.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -14,23 +14,26 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.patchca.service.ConfigurableCaptchaService;
 import org.patchca.utils.encoder.EncoderHelper;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 @Controller
 @RequestMapping("auth/authen")
 public class AuthenController {
 	protected static final Log LOG=LogFactory.getLog(AuthenController.class);
-	private static final String DEFAULT_LOGIN_URL="login";
+	private static final String DEFAULT_LOGIN_URL="auth/login";
 	private String loginUrl=DEFAULT_LOGIN_URL;
 	
 	private static final String DEFAULT_SUCCESS_URL="index";
@@ -51,6 +54,12 @@ public class AuthenController {
     private String usernameParam = DEFAULT_USERNAME_PARAM;
     private String passwordParam = DEFAULT_PASSWORD_PARAM;
     private String rememberMeParam = DEFAULT_REMEMBER_ME_PARAM;
+    
+    public static final String DEFAULT_ERROR_MESSAGE = "errorMessage";
+    private String errorMessageKey=DEFAULT_ERROR_MESSAGE;
+    
+    @Resource(name="messageSource")
+    private ReloadableResourceBundleMessageSource messageSource;
 	
     @Resource
 	private ConfigurableCaptchaService configurableCaptchaService;
@@ -74,6 +83,14 @@ public class AuthenController {
 	}
 
 	
+
+	public String getErrorMessageKey() {
+		return errorMessageKey;
+	}
+
+	public void setErrorMessageKey(String errorMessageKey) {
+		this.errorMessageKey = errorMessageKey;
+	}
 
 	public String getCaptchaParam() {
 		return captchaParam;
@@ -125,15 +142,9 @@ public class AuthenController {
 		this.rememberMeParam = rememberMeParam;
 	}
 	
-	@ModelAttribute("user")
-	private UserModel getNewUserModel(){
-		UserModel um=new UserModel();
-		um.captchaEnable=isCaptchaEnable();
-		return um;
-	}
 
 	@RequestMapping(value="/login",method=RequestMethod.GET)
-	public String toLoginPage(Model model){
+	public String toLoginPage(HttpServletRequest request,Model model){
 		Subject subject=SecurityUtils.getSubject();
 		if(subject.isAuthenticated()){
 			return "redirect:"+getSuccessUrl();
@@ -141,21 +152,41 @@ public class AuthenController {
 		
 		model.addAttribute("captchaEnable", checkCaptchaEnable());
 		
-		return getLoginUrl();
+		return "WEB-INF/"+getLoginUrl();
 	}
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public String login(HttpServletRequest request,HttpServletResponse response,Model model,@ModelAttribute("user")UserModel user,Errors errors){
-		validation(request,user, errors);
-		if(errors.hasErrors()){
+	public String login(HttpServletRequest request,HttpServletResponse response,Model model){
+		
+		if(!validation(request)){
 			return getLoginUrl();
 		}
-		
+		Subject subject=SecurityUtils.getSubject();
+		if(subject.isAuthenticated()){
+			return "redirect:"+getSuccessUrl();
+		}
 		String username=request.getParameter(getUsernameParam());
 		String password=request.getParameter(getPasswordParam());
 		String  rememberMe=request.getParameter(getRememberMeParam());
+		UsernamePasswordToken token=new UsernamePasswordToken(username.trim(), password);
+		token.setRememberMe(rememberMe!=null&&"true".equalsIgnoreCase(rememberMe.trim()));
+		try {
+			subject.login(token);
+			return "redirect:"+getSuccessUrl();
+		}catch(UnknownAccountException e){
+			LOG.info(">>>>用户名错误");
+			request.setAttribute(errorMessageKey, getMessage("base.authen.login.unamepwd.err.match",null,"用户名或密码有误",request));
+			return getLoginUrl();
+		}catch(IncorrectCredentialsException e){
+			LOG.info(">>>>认证错误");
+			request.setAttribute(errorMessageKey, getMessage("base.authen.login.unamepwd.err.match",null,"用户名或密码有误",request));
+			return getLoginUrl();
+		}catch (AuthenticationException e) {
+			LOG.info(">>>>未知错误");
+			request.setAttribute(errorMessageKey, getMessage("base.authen.login.unamepwd.err.unknown",null,"未知错误",request));
+			return getLoginUrl();
+		}
 		
-		return "";
 	}
 	
 	@RequestMapping("/captcha")
@@ -197,33 +228,43 @@ public class AuthenController {
 		}
 	}
 	
-	private void validation(HttpServletRequest request,UserModel user,Errors errors){
-		String username=user.getUsername();
-		String password=user.getPassword();
-		String captcha=user.getCaptcha();
+	private String getMessage(String code, Object[] args, String defaultMessage,HttpServletRequest request){
+		Locale locale=RequestContextUtils.getLocale(request);
+		LOG.debug(">>>>"+locale);
+		String message=messageSource.getMessage(code, args, defaultMessage, locale);
+		LOG.debug(">>>>message:"+message);
+		return message;
+	}
+	
+	private boolean validation(HttpServletRequest request){
+		String username=request.getParameter(getUsernameParam());
+		String password=request.getParameter(getPasswordParam());
+		String captcha=request.getParameter(getCaptchaParam());
 		
-		if(checkCaptchaEnable()&&(captcha==null||!captcha.equals(request.getSession()))){
-			errors.rejectValue(getCaptchaParam(), "base.authen.login.captcha.err.match", "验证码不匹配");
-			return;
+		if(checkCaptchaEnable()&&(captcha==null||!captcha.equalsIgnoreCase(getCaptchaValue(request.getSession())))){
+			request.setAttribute(errorMessageKey, getMessage("base.authen.login.captcha.err.match",null,"验证码不匹配",request));
+			return false;
 		}
 		
 		if(username==null||"".equals(username.trim())){
-			errors.rejectValue(getUsernameParam(), "base.authen.login.username.err.null", "用户名不能为空");
-			return;
+			request.setAttribute(errorMessageKey, getMessage("base.authen.login.username.err.null",null,"用户名不能为空",request));
+			return false;
 		}
 		if(username.trim().length()<6||username.trim().length()>20){
-			errors.rejectValue(getUsernameParam(), "base.authen.login.username.err.length", new Object[]{6,20}, "用户名长度必须为{0}-{1}");
-			return;
+			request.setAttribute(errorMessageKey, getMessage("base.authen.login.username.err.length",new Object[]{6,20},"用户名长度必须为{0}-{1}",request));
+			return false;
 		}
 		
 		if(password==null||"".equals(password.trim())){
-			errors.rejectValue(getPasswordParam(), "base.authen.login.password.err.null", "密码不能为空");
-			return;
+			request.setAttribute(errorMessageKey, getMessage("base.authen.login.password.err.null",null,"密码不能为空",request));
+			return false;
 		}
 		if(password.trim().length()<6||password.trim().length()>20){
-			errors.rejectValue(getPasswordParam(), "base.authen.login.password.err.length", new Object[]{6,20}, "密码长度必须为{0}-{1}");
-			return;
+			request.setAttribute(errorMessageKey, getMessage("base.authen.login.password.err.length",new Object[]{6,20},"密码长度必须为{0}-{1}",request));
+			return false;
 		}
+		
+		return true;
 	}
 	
 	private boolean checkCaptchaEnable(){
@@ -232,33 +273,4 @@ public class AuthenController {
 		return result;
 	}
 	
-	private class UserModel implements Serializable{
-		private String username;
-		private String password;
-		private String captcha;
-		private	Boolean captchaEnable;
-		public String getUsername() {
-			return username;
-		}
-		public void setUsername(String username) {
-			this.username = username;
-		}
-		public String getPassword() {
-			return password;
-		}
-		public void setPassword(String password) {
-			this.password = password;
-		}
-		public String getCaptcha() {
-			return captcha;
-		}
-		public void setCaptcha(String captcha) {
-			this.captcha = captcha;
-		}
-		public Boolean getCaptchaEnable() {
-			return captchaEnable;
-		}
-		
-		
-	}
 }

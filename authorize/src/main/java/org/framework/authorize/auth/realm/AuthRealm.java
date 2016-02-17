@@ -9,6 +9,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 
 public class AuthRealm extends AuthorizingRealm {
 
@@ -28,7 +29,8 @@ public class AuthRealm extends AuthorizingRealm {
 			if(username==null||!"supperadmin".equals(username)){
 				throw new UnknownAccountException();
 			}
-			SimpleAuthenticationInfo authen=new SimpleAuthenticationInfo("supperadmin", "", getName());
+			SimpleAuthenticationInfo authen=new SimpleAuthenticationInfo("supperadmin", 
+					"5081570e9511922c3a5f3621f0c6c6d0", ByteSource.Util.bytes("authorize"), getName());
 			return authen;
 		}
 		return null;
